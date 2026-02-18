@@ -14,8 +14,6 @@
     <?php include_once __DIR__ . '/components/Banner.php' ?>
     <section>
       <div style="display: flex; align-items: center; justify-content: space-between;">
-        <h2>Productos mas populares
-        </h2>
         <a style="background-color: red;" href="/productos?category=bebidas">Ir</a>
       </div>
       <div>

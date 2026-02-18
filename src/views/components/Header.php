@@ -13,7 +13,6 @@
       align-items: center;
       gap: .5rem;
       font-weight: bold;
-
     }
 
     .search {
@@ -40,29 +39,89 @@
         aspect-ratio: 2/1;
       }
     }
-
-    .btn-interaction {
-      display: flex;
-      justify-content: center;
-      gap: clamp(.5rem, .001vw, 2rem);
-      font-size: 2rem;
-
-      &>div {
-        display: flex;
-        align-items: center;
-      }
-    }
   }
 
   @media (width <=590px) {
     .header {
       padding-inline: 4px;
+
     }
 
+
     .logo {
+      gap: 0px;
+
       span {
         display: none;
         font-size: 1.5rem;
+      }
+    }
+  }
+
+  .menu-category,
+  .menu-profile {
+    position: relative;
+
+
+    &:hover {
+
+      .dropdown-category,
+      .dropdown-profile {
+        visibility: visible;
+        opacity: 1;
+        translate: 0 0;
+        display: flex;
+        opacity: 1;
+        visibility: visible;
+
+      }
+    }
+
+    svg {
+      font-size: 1.5rem;
+    }
+  }
+
+  .dropdown-category {
+    left: 0;
+  }
+
+  .dropdown-profile {
+    right: 0;
+  }
+
+  .dropdown-category,
+  .dropdown-profile {
+    position: absolute;
+    background-color: var(--color-bg);
+    border-radius: var(--border-l);
+    padding: .5rem 1rem;
+    font-size: small;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    animation: animation-dropdown 200ms;
+    opacity: 0;
+    translate: 0 -10px;
+    transition: all 200ms allow-discrete ease;
+    opacity: 0;
+    visibility: hidden;
+
+
+    li {
+      list-style: none;
+
+      &:hover {
+        background: var(--color-primary-light);
+        border-radius: var(--border-s);
+      }
+
+      &>a {
+        display: flex;
+        gap: .3rem;
+        width: 100%;
+        padding: 4px 8px;
+        font-weight: bold;
       }
     }
   }
@@ -70,35 +129,45 @@
 
 <header class="header">
   <div class="logo">
-    <div class="menu">
+    <div class="menu-category">
       <?php include_once 'assets/svg/icons/menu-deep.svg' ?>
+      <div class="dropdown-category">
+        <h3>Categoría</h3>
+        <ul>
+          <!-- buscar las categorías disponibles -->
+          <?php foreach ([['name' => 'lacteos']] as $item): ?>
+            <li><a href="/productos?category=<?= $item['name'] ?>"><?= $item['name'] ?></a></li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
     </div>
     <?php include_once 'assets/svg/icons/shopping-cart.svg' ?>
     <span>MINIMARKET</span>
   </div>
-  <div class="search">
-    <input placeholder="buscar un producto..." type="search" name="user_search" id="UserSearch">
-    <button><?php include_once 'assets/svg/icons/search.svg' ?></button>
+  <div class="search" id="user-search">
+    <input placeholder="buscar un producto..." type="search" name="input_search" id="input-search">
+    <button id="btn-search"><?php include_once 'assets/svg/icons/search.svg' ?></button>
   </div>
-  <div class="btn-interaction">
-    <div><?php include_once 'assets/svg/icons/shopping-bag.svg' ?></div>
-    <div><?php include_once 'assets/svg/icons/profile.svg' ?></div>
+  <div class="menu-profile">
+    <?php include_once 'assets/svg/icons/profile.svg' ?>
+    <ul class="dropdown-profile">
+      <li>
+        <a href="/shopping"><?php include_once 'assets/svg/icons/shopping-bag.svg' ?>carrito de compras</a>
+      </li>
+    </ul>
   </div>
 </header>
 
-<style>
-  .aside {
-    position: absolute;
+<script>
+  const search = document.querySelector('#user-search')
+  const btnSearch = document.querySelector('#btn-search')
 
-  }
-</style>
-
-<aside class="aside">
-  <h2>Categoría</h2>
-  <ul>
-    <li><a href="">bebidas</a></li>
-    <li><a href="">comestibles</a></li>
-  </ul>
-</aside>
-
-<script></script>
+  console.log(search.closest('button'))
+  search.addEventListener('click', (e) => {
+    if (e.target.closest('button')) {
+      const input = search.querySelector('input')
+      const value = input.value.trim()
+      if (value) window.location.href = `/productos?search=${value}`
+    }
+  })
+</script>
