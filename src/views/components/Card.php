@@ -68,15 +68,20 @@
 <div class="card">
   <a href="" class="card-link">
     <div class="card-attr">
-      <span class="item-discount">discount</span>
-      <span class="item-price">price</span>
+      <?php if ($item['discount'] > 0): ?>
+        <span class="item-discount">discount</span>
+      <?php endif; ?>
+
+      <span class="item-price">
+        <?= $item['unit_price']; ?>
+      </span>
     </div>
     <div class="img-container">
       <img src="https://i.pinimg.com/736x/82/7c/44/827c44b706d30d9d432776fab3ee998c.jpg" alt="img fruta" class="card-img">
     </div>
     <div class="card-info">
-      <p class="item-name">mango</p>
-      <span class="item-description">delicioso mango amarillo.</span>
+      <p class="item-name"><?= $item['name']; ?></p>
+      <span class="item-description"><?= $item['description']; ?></span>
     </div>
   </a>
   <div class="item_amount">

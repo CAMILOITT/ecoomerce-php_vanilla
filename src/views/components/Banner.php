@@ -3,7 +3,7 @@
     display: flex;
     max-width: 100vw;
     overflow-x: scroll;
-    height: 75vh;
+    aspect-ratio: 2/1;
 
     img {
       width: 100vw;

@@ -25,6 +25,7 @@ class App
 
   function render()
   {
+    $conn = $this->conn;
     $path_req = realpath($this->baseViews . "/{$this->uri}/index.php");
 
     if ($this->uri === 'api/v1/register') {

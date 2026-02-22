@@ -106,8 +106,9 @@
     transition: all 200ms allow-discrete ease;
     opacity: 0;
     visibility: hidden;
+    z-index: 2;
 
-
+    /* https://youtube.com/shorts/QNxfHV4zlFA?si=g3or7yqhwlGXxleg */
     li {
       list-style: none;
 
@@ -133,12 +134,30 @@
       <?php include_once 'assets/svg/icons/menu-deep.svg' ?>
       <div class="dropdown-category">
         <h3>Categoría</h3>
-        <ul>
-          <!-- buscar las categorías disponibles -->
-          <?php foreach ([['name' => 'lacteos']] as $item): ?>
-            <li><a href="/productos?category=<?= $item['name'] ?>"><?= $item['name'] ?></a></li>
-          <?php endforeach; ?>
-        </ul>
+        <?php
+
+        use App\Controllers\CategoryController;
+
+        $categoryController = new CategoryController($conn);
+
+        $allCategories = $categoryController->getAllCategories();
+        $allSubcategories = $categoryController->getAllSubcategories();
+
+        foreach ($allCategories as $category): ?>
+          <div style="display: flex; gap: .3rem;">
+            <h4><?= $category['name'] ?></h4>
+            <ul>
+              <!-- buscar las categorías disponibles -->
+              <?php
+              $listCategories = array_filter($allSubcategories, function ($item) use ($category) {
+                return $item['parent_id'] === $category['id'];
+              });
+              foreach ($listCategories as $subcategory): ?>
+                <li><a href="/productos?category=<?= $subcategory['name'] ?>"><?= $subcategory['name'] ?></a></li>
+              <?php endforeach; ?>
+            </ul>
+          </div>
+        <?php endforeach; ?>
       </div>
     </div>
     <?php include_once 'assets/svg/icons/shopping-cart.svg' ?>
@@ -162,12 +181,18 @@
   const search = document.querySelector('#user-search')
   const btnSearch = document.querySelector('#btn-search')
 
+  function searchProduct() {
+    const input = search.querySelector('input')
+    const value = input.value.trim()
+    if (value) window.location.href = `/productos?search=${value}`
+  }
+
   console.log(search.closest('button'))
   search.addEventListener('click', (e) => {
-    if (e.target.closest('button')) {
-      const input = search.querySelector('input')
-      const value = input.value.trim()
-      if (value) window.location.href = `/productos?search=${value}`
-    }
+    if (e.target.closest('button')) searchProduct()
+  })
+
+  search.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') searchProduct()
   })
 </script>

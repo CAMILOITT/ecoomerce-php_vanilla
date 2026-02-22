@@ -58,6 +58,7 @@ dialog {
 body {
   background: var(--color-bg);
   color: var(--color-text);
+  min-height: 100vh;
 }
 
 h1,
