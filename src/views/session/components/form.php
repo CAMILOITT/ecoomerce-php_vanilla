@@ -89,7 +89,15 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
-      }).then(response => response.json())
+      }).then(response => {
+        if (!response.ok) throw new Error('Erro al iniciar session');
+        return response.json()
+      })
+      .then(res => {
+        if (res.data.success) window.location.href = res.data.redirect
+        else document.querySelector('.message-error').style.display = 'block'
+
+      })
       .catch(error => {
         console.error('Error:', error);
         alert('Error al iniciar sesión. Por favor, inténtalo de nuevo.');

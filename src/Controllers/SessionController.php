@@ -5,33 +5,38 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use PDO;
+use App\Utils\HandleHttp;
+use App\Types\CodeStatusHttp;
 
 class SessionController
 {
-  public function __construct() {}
+  public function __construct(private PDO $connection) {}
 
-  public function register(PDO $pdo) {}
+  public function register() {}
 
-  public function login(string $user, string $password, PDO $connection)
+  public function logout()
   {
-    $stmt = $connection->prepare('SELECT * FROM staff WHERE username = :username');
-    $stmt->bindParam(':username', $user);
-    $stmt->execute();
+    session_destroy();
+    HandleHttp::response(CodeStatusHttp::OK, ['success' => true, 'redirect' => '/session/login', 'message' => 'Logout successful']);
+  }
+
+  public function login(string $userEmail, string $password)
+  {
+    $stmt = $this->connection->prepare('SELECT * FROM customers WHERE email = :email');
+    $stmt->execute([':email' => $userEmail]);
     $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$userData) {
-      http_response_code(401);
-      exit('Invalid credentials');
+      HandleHttp::error(CodeStatusHttp::UNAUTHORIZED, 'Invalid credentials');
+      return;
     }
     if (!password_verify($password, $userData['password'])) {
-      http_response_code(401);
-      exit('Invalid credentials');
+      HandleHttp::error(CodeStatusHttp::UNAUTHORIZED, 'Invalid credentials');
+      return;
     }
-
-    // Aquí podrías generar un token JWT o iniciar una sesión
-    echo 'Login successful';
+    session_start();
+    $_SESSION['id'] = $userData['id'];
+    // HandleHttp::redirect('/admin/dashboard');
+    HandleHttp::response(CodeStatusHttp::OK, ['success' => true, 'redirect' => '/admin/dashboard', 'message' => 'Login successful']);
   }
 }
-
-
-// Note: Aprende a usar la funcion CALCULATE en DAX de Power Pivot y Power BI

@@ -1,17 +1,3 @@
-<script>
-  document.getElementById('close_session').addEventListener('click', function() {
-    // Aquí puedes agregar la lógica para cerrar la sesión, como eliminar cookies o redirigir a una página de inicio de sesión
-    alert('Sesión cerrada');
-    // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión:
-    // window.location.href = '/login.php';
-  });
-</script>
-
-<aside class="aside-admin">
-  <?php include __DIR__ . '/link_page.php' ?>
-  <button id='close_session'>Cerrar sesión</button>
-</aside>
-
 <style>
   .aside-admin {
     width: 200px;
@@ -43,3 +29,26 @@
     background-color: #ddd;
   }
 </style>
+
+<aside class="aside-admin">
+  <?php include __DIR__ . '/link_page.php' ?>
+  <button id='close_session'>Cerrar sesión</button>
+</aside>
+
+
+<script>
+  document.getElementById('close_session').addEventListener('click', () => {
+    fetch('/api/v1/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => {
+      if (response.ok) window.location.href = '/';
+      else alert('Error al cerrar sesión. Por favor, inténtalo de nuevo.');
+    }).catch(error => {
+      console.error('Error:', error);
+      alert('Error al cerrar sesión. Por favor, inténtalo de nuevo.');
+    });
+  })
+</script>

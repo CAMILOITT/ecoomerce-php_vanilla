@@ -165,11 +165,14 @@
   </div>
   <div class="search" id="user-search">
     <input placeholder="buscar un producto..." type="search" name="input_search" id="input-search">
-    <button id="btn-search"><?php include_once 'assets/svg/icons/search.svg' ?></button>
+    <button id="btn-search"><?php include 'assets/svg/icons/search.svg' ?></button>
   </div>
   <div class="menu-profile">
-    <?php include_once 'assets/svg/icons/profile.svg' ?>
+    <?php include 'assets/svg/icons/profile.svg' ?>
     <ul class="dropdown-profile">
+      <li>
+        <a href="<?php echo '/profile' ?>"><?php include 'assets/svg/icons/profile.svg' ?>perfil</a>
+      </li>
       <li>
         <a href="/shopping"><?php include_once 'assets/svg/icons/shopping-bag.svg' ?>carrito de compras</a>
       </li>

@@ -40,4 +40,21 @@ class ProductController
   }
 
   public function updateProductById(int $id, ...$props) {}
+
+  public function getProductsByCategory(string $category)
+  {
+    $stmt = $this->conn->prepare("SELECT p.* FROM {$this->table} p JOIN categories c ON p.category_id = c.id WHERE c.name = :category");
+    $stmt->bindParam(':category', $category, PDO::PARAM_STR);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC) ?? [];
+  }
+
+  public function getProductsBySearch(string $search)
+  {
+    $stmt = $this->conn->prepare("SELECT * FROM {$this->table} WHERE name LIKE :search OR description LIKE :search");
+    $likeSearch = '%' . $search . '%';
+    $stmt->bindParam(':search', $likeSearch, PDO::PARAM_STR);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC) ?? [];
+  }
 }

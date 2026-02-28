@@ -9,6 +9,8 @@ use App\Controllers\SessionController;
 use App\Controllers\UserController;
 use App\Helpers\Router;
 use PDO;
+use App\Types\CodeStatusHttp;
+use App\Utils\HandleHttp;
 
 class App
 {
@@ -37,13 +39,12 @@ class App
       // ** auto seo e img.
       // ** a;adir auth
       if (!$data) {
-        http_response_code(400);
-        exit('Datos JSON inválidos');
+        HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Datos JSON inválidos');
+        return;
       }
 
       if (json_last_error() !== JSON_ERROR_NONE) {
-        http_response_code(400);
-        exit('Error al parsear JSON: ' . json_last_error_msg());
+        HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Error al parsear JSON: ' . json_last_error_msg());
       }
       $bestProducts = new DashboardController();
       $bestProducts->getBestProductsOfMonth($this->conn);
@@ -52,33 +53,36 @@ class App
       return;
     }
 
+    if ($this->uri === 'api/v1/logout') {
+      $session = new SessionController($this->conn);
+      $session->logout();
+    }
+
     if ($this->uri === 'api/v1/login') {
       $raw = file_get_contents('php://input');
       $data = json_decode($raw, true);
-
       if (!$data) {
-        http_response_code(400);
-        exit('Datos JSON inválidos');
+        HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Datos JSON inválidos');
+        return;
       }
 
       if (json_last_error() !== JSON_ERROR_NONE) {
-        http_response_code(400);
-        exit('Error al parsear JSON: ' . json_last_error_msg());
+        HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Error al parsear JSON: ' . json_last_error_msg());
+        return;
       }
 
-      $user = $data['email'] ?? '';
-      var_dump($user);
+      $userEmail = $data['email'] ?? '';
       $password = $data['password'] ?? '';
-      if ($user === "" || $password === "") {
-        http_response_code(400);
-        exit('Usuario y contraseña son requeridos');
+      if ($userEmail === "" || $password === "") {
+        HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Usuario y contraseña son requeridos');
         return null;
       }
       $connection = $this->conn;
-      $session = new SessionController();
-      $session->login($user, $password, $connection);
-      header('Location: /admin/dashboard');
+      $session = new SessionController($connection);
+      $session->login($userEmail, $password);
       return;
+      // HandleHttp::redirect('/admin/dashboard');
+      // exit();
     }
     // echo $this->baseViews;
     // echo $this->uri;
