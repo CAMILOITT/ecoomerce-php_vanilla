@@ -22,10 +22,13 @@ class CustomerController
   public function getPurchaseHistoryByCustomerId(int $customerId)
   {
     $stmt = $this->pdo->prepare(
-      "SELECT f.id, f.date, f.total
-       FROM facturas f
-       WHERE f.customer_id = :customerId
-       ORDER BY f.date DESC;"
+      "SELECT s.id, st.name, st.lastname,  s.bill_date, s.total
+      FROM facturas.sales s 
+      inner JOIN  facturas.staff st on 
+      s.staff_id = st.id
+      where s.customer_id = :customerId
+      ORDER by bill_date DESC
+      LIMIT 50;"
     );
     $stmt->execute([':customerId' => $customerId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);

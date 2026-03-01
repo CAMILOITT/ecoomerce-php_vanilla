@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Helpers;
 
 use App\Controllers\DashboardController;
+use App\Controllers\ProductController;
 use App\Controllers\SessionController;
 use App\Controllers\UserController;
 use App\Helpers\Router;
@@ -28,7 +29,15 @@ class App
   function render()
   {
     $conn = $this->conn;
-    $path_req = realpath($this->baseViews . "/{$this->uri}/index.php");
+    $path_view = realpath($this->baseViews . "/{$this->uri}/layout.php");
+    $path_content = realpath($this->baseViews . "/{$this->uri}/index.php");
+
+    if ($this->uri === 'api/v1/products') {
+      $userController = new ProductController($this->conn);
+      $users = $userController->getAllProducts($_GET['page'] ?? 0, $_GET['limit'] ?? 10);
+      echo json_encode($users);
+      return;
+    }
 
     if ($this->uri === 'api/v1/register') {
       $raw = file_get_contents('php://input');
@@ -48,7 +57,6 @@ class App
       }
       $bestProducts = new DashboardController();
       $bestProducts->getBestProductsOfMonth($this->conn);
-      header('Content-Type: application/json'); // !A;adir por defecto en el controller o peticion, (un manejador de content-type)
       echo json_encode($bestProducts);
       return;
     }
@@ -77,34 +85,23 @@ class App
         HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Usuario y contraseña son requeridos');
         return null;
       }
-      $connection = $this->conn;
-      $session = new SessionController($connection);
+      $session = new SessionController($this->conn);
       $session->login($userEmail, $password);
       return;
       // HandleHttp::redirect('/admin/dashboard');
       // exit();
     }
-    // echo $this->baseViews;
-    // echo $this->uri;
-    // echo '\n';
 
-    // if (!$path_req) {
-    //   $path_req = realpath(__DIR__ . "/../src/views/{$this->uri}" .  '/index.php');
-    //   echo '</ br>'; probar diferentes rutas para ver si se encuentra el archivo
-    //   echo __DIR__ . "/../src/views/{$this->uri}" .  '/index.php';
-    //   // $path_req = realpath(__DIR__ . "/../src/views/{$this->uri}" . '[product]' . 'index.php');
-    //   return;
-    // }
+    if (!$path_view) {
+      $path_view = realpath($this->baseViews . "/{$this->uri}/../layout.php");
+      include $path_view;
 
-    // echo $path_req;
+      // echo "Ruta no encontrada: {$this->uri}";
+      // HandleHttp::error(CodeStatusHttp::NOT_FOUND, 'Página no encontrada');
+      return;
+    }
 
-
-    // if (!$path_req) {
-    //   http_response_code(404);
-    //   exit('404');
-    // }
-
-    include_once $path_req;
+    include $path_view;
   }
 
   function router(Router $router)

@@ -3,9 +3,9 @@
    <li><a class='link-page' href="/admin/products">Productos</a></li>
    <li><a class='link-page' href="/admin/category">Categorías</a></li>
    <li><a class='link-page' href="/admin/order">Pedidos</a></li>
-   <li><a class='link-page' href="/admin/customer">Clientes/Usuarios</a></li>
+   <li><a class='link-page' href="/admin/users">Clientes/Usuarios</a></li>
    <li><a class='link-page' href="/admin/rol">Roles</a></li>
-   <li><a class='link-page' href="/admin/config">Configuración</a></li>
+   <!-- <li><a class='link-page' href="/admin/config">Configuración</a></li> -->
    <!-- <?php foreach (
           [
             'Inicio',

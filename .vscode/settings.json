@@ -4,7 +4,20 @@
     "**/.svn": true,
     "**/.hg": true,
     "**/.DS_Store": true,
-    "**/Thumbs.db": true
+    "**/Thumbs.db": true,
+    "[!s]*/**": true,
+    "s[!r]*/**": true,
+    "sr[!c]*/**": true,
+    "src/[!v]*/**": true,
+    "src/v[!i]*/**": true,
+    "src/vi[!e]*/**": true,
+    "src/vie[!w]*/**": true,
+    "src/view[!s]*/**": true,
+    "src/views/[!a]*/**": true,
+    "src/views/a[!d]*/**": true,
+    "src/views/ad[!m]*/**": true,
+    "src/views/adm[!i]*/**": true,
+    "src/views/admi[!n]*/**": true
   },
   "cSpell.words": [
     "minimarket"
