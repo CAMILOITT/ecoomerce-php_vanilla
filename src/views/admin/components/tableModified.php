@@ -1,11 +1,19 @@
+<style>
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem;
+  }
+</style>
+
 <div class="modified-table"></div>
 
-<table>
+<table class="table">
   <thead>
     <?php
     foreach (array_keys($data[0]) as $key):
     ?>
-      <th><?= htmlspecialchars($key) ?></th>
+      <th><?= $key ?></th>
     <?php endforeach; ?>
     <th>Acciones</th>
   </thead>
@@ -17,7 +25,7 @@
         <?php
         foreach ($item as $value):
         ?>
-          <td><?= htmlspecialchars($value) ?></td>
+          <td><?= $value ?? 0 ?></td>
         <?php endforeach; ?>
         <td><button>Editar</button></td>
       </tr>

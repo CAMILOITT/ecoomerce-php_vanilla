@@ -11,8 +11,9 @@
 
 <body>
   <?php include __DIR__ . '/components/aside.php'; ?>
-  <?php include $path_content ?>
-
+  <main class="main">
+    <?php include $path_content ?>
+  </main>
 </body>
 
 </html>
@@ -20,5 +21,9 @@
 <style>
   body {
     display: flex;
+  }
+
+  .main {
+    width: 100%;
   }
 </style>
