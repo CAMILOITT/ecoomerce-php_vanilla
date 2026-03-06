@@ -21,11 +21,8 @@ class SalesController extends Controller
   s.subtotal_iva,
   s.iva,
   s.total,
-  s.state,
   s.bill_number,
   s.bill_date,
-  s.created_at,
-  s.updated_at,
   st.name as staff_name,
   c.name as customer_name
 FROM facturas.sales s

@@ -64,39 +64,3 @@ class Router
     return rtrim($uri, '/') ?: '/';
   }
 }
-
-
-// class Router
-// {
-//   private string $basePath;
-//   private array $routes = [];
-
-//   public function __construct(string $basePath = '')
-//   {
-//     $this->basePath = $basePath;
-//   }
-
-//   public function get(string $path, string ...$handlers): void
-//   {
-//     $this->addRoute('GET', $path, $handlers);
-//   }
-
-//   public function post(string $path, string ...$handlers): void
-//   {
-//     $this->addRoute('POST', $path, $handlers);
-//   }
-
-//   private function addRoute(string $method, string $path, array $handlers): void
-//   {
-//     $this->routes[] = [
-//       'method' => $method,
-//       'path' => rtrim($this->basePath . $path, '/'),
-//       'handlers' => $handlers,
-//     ];
-//   }
-
-//   public function getRoutes(): array
-//   {
-//     return $this->routes;
-//   }
-// }

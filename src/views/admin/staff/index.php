@@ -7,13 +7,8 @@ $titleHeader = "Personal";
 $descriptionHeader = "Administra el personal de tu tienda. Agrega, edita o elimina empleados para mantener un equipo eficiente.";
 ?>
 
-<main>
-  <?php include __DIR__ . '/../components/header.php'; ?>
-
-  <div class="product-list">
-
-    <?php $data = $staff;
-    include __DIR__ . '/../components/tableModified.php' ?>
-
-  </div>
-</main>
+<?php include __DIR__ . '/../components/header.php'; ?>
+<div class="product-list">
+  <?php $data = $staff;
+  include __DIR__ . '/../components/tableModified.php' ?>
+</div>

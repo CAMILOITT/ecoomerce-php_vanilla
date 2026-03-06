@@ -1,9 +1,12 @@
 <style>
   .aside-admin {
-    width: 200px;
+    width: 150px;
     height: 100vh;
+    position: sticky;
+    top: 0;
+    right: 0;
     background-color: #f0f0f0;
-    padding: 20px;
+    padding: 1rem .5rem;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;

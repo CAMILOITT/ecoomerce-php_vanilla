@@ -7,13 +7,8 @@ $titleHeader = "Clientes";
 $descriptionHeader = "Administra los clientes de tu tienda. Agrega, edita o elimina clientes para mantener un registro preciso de tu base de datos.";
 ?>
 
-<main>
-  <?php include __DIR__ . '/../components/header.php'; ?>
-
-  <div class="product-list">
-
-    <?php $data = $products;
-    include __DIR__ . '/../components/tableModified.php' ?>
-
-  </div>
-</main>
+<?php include __DIR__ . '/../components/header.php'; ?>
+<div class="product-list">
+  <?php $data = $products;
+  include __DIR__ . '/../components/tableModified.php' ?>
+</div>
