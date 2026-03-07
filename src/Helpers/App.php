@@ -26,11 +26,60 @@ class App
     $this->uri = $uri;
   }
 
+  function handleFrontend()
+  {
+    $path_dir = realpath($this->baseViews . "/{$this->uri}/");
+    $conn = $this->conn;
+
+    if (!$path_dir) {
+      $uri = join('/', array_slice(explode('/', $this->uri), 0, -1));
+      $path_dir = realpath($this->baseViews . "/$uri");
+      $dirs =  scandir($path_dir);
+      $dir_match = null;
+      foreach ($dirs as $dir) {
+        if (preg_match('/\[*\]/', $path_dir . $dir)) {
+          $dir_match = $dir;
+          break;
+        }
+      }
+      $path_content = realpath($path_dir  . "/$dir_match/index.php");
+      $path_view = realpath($path_dir  . "/$dir_match/layout.php");
+
+      if (!$path_content || !$path_view) {
+        HandleHttp::error(CodeStatusHttp::NOT_FOUND, 'Página no encontrada');
+        return;
+      }
+
+      include_once $path_view;
+      return;
+    }
+
+
+    $path_content = realpath($this->baseViews . "/{$this->uri}/index.php");
+    $path_view = realpath($this->baseViews . "/{$this->uri}/layout.php");
+    // echo realpath($this->baseViews . "/{$this->uri}");
+    // echo realpath($this->baseViews . "/{$this->uri}");
+    // echo is_dir(realpath($this->baseViews . "/{$this->uri}"));
+    // print_r(is_dir($this->uri));
+    if (is_dir($path_content)) {
+      $path_content = realpath($this->baseViews . "/{$this->uri}/index.php");
+    }
+
+    if (!$path_view) {
+      $path_view = realpath($this->baseViews . "/{$this->uri}/../layout.php");
+      include $path_view;
+      return;
+    }
+    include $path_view;
+  }
+
   function render()
   {
-    $conn = $this->conn;
-    $path_view = realpath($this->baseViews . "/{$this->uri}/layout.php");
-    $path_content = realpath($this->baseViews . "/{$this->uri}/index.php");
+
+    $this->handleFrontend();
+    // $conn = $this->conn;
+    // $path_view = realpath($this->baseViews . "/{$this->uri}/layout.php");
+    // $path_content = realpath($this->baseViews . "/{$this->uri}/index.php");
 
     if ($this->uri === 'api/v1/products') {
       $userController = new ProductController($this->conn);
@@ -42,11 +91,6 @@ class App
     if ($this->uri === 'api/v1/register') {
       $raw = file_get_contents('php://input');
       $data = json_decode($raw, true);
-      // ** Nota a;adir un manejador de controller y codigo tipados
-      // ** intanciamiento desde el index
-      // ** auto import con diferentes layouts.
-      // ** auto seo e img.
-      // ** a;adir auth
       if (!$data) {
         HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Datos JSON inválidos');
         return;
@@ -88,26 +132,14 @@ class App
       $session = new SessionController($this->conn);
       $session->login($userEmail, $password);
       return;
-      // HandleHttp::redirect('/admin/dashboard');
-      // exit();
     }
 
-    if (!$path_view) {
-      $path_view = realpath($this->baseViews . "/{$this->uri}/../layout.php");
-      include $path_view;
+    // if (!$path_view) {
+    //   $path_view = realpath($this->baseViews . "/{$this->uri}/../layout.php");
+    //   include $path_view;
+    //   return;
+    // }
 
-      // echo "Ruta no encontrada: {$this->uri}";
-      // HandleHttp::error(CodeStatusHttp::NOT_FOUND, 'Página no encontrada');
-      return;
-    }
-
-    include $path_view;
+    // include $path_view;
   }
-
-  function router(Router $router)
-  {
-    $router->dispatch();
-  }
-
-  function redirect() {}
 }

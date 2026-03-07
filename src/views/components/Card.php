@@ -66,7 +66,7 @@
 </style>
 
 <div class="card">
-  <a href="" class="card-link">
+  <a href="/products/<?= $item['id'] ?>" class="card-link">
     <div class="card-attr">
       <?php if ($item['discount'] > 0): ?>
         <span class="item-discount">discount</span>

@@ -22,11 +22,9 @@ class SessionController
 
   public function login(string $userEmail, string $password)
   {
-    $stmt = $this->connection->prepare('SELECT * FROM customers WHERE email = :email');
-    $stmt->execute([':email' => $userEmail]);
-    $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+    $userData = (new UserController($this->connection))->getUserByEmail($userEmail);
 
-    if (!$userData) {
+    if (isset($userData)) {
       HandleHttp::error(CodeStatusHttp::UNAUTHORIZED, 'Invalid credentials');
       return;
     }
@@ -36,7 +34,6 @@ class SessionController
     }
     session_start();
     $_SESSION['id'] = $userData['id'];
-    // HandleHttp::redirect('/admin/dashboard');
     HandleHttp::response(CodeStatusHttp::OK, ['success' => true, 'redirect' => '/admin/dashboard', 'message' => 'Login successful']);
   }
 }
