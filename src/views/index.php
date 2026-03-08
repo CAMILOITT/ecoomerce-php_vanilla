@@ -1,7 +1,36 @@
+<style>
+  .products-section {
+    padding: 1rem 0 3rem 0;
+  }
+  
+  .products-carousel {
+    display: flex;
+    gap: 1.5rem;
+    align-items: stretch;
+    overflow-x: auto;
+    padding: 1rem 0.5rem 2rem 0.5rem; /* extra padding for hover shadows */
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    
+    /* Hide scrollbar for cleaner look but keep functionality */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .products-carousel::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+  
+  .products-carousel > * {
+      scroll-snap-align: start;
+  }
+</style>
+
 <main>
   <?php include_once __DIR__ . '/components/Banner.php' ?>
-  <section>
-    <div style="display: flex; gap: .8rem; align-items: center; overflow-y: scroll;">
+  
+  <section class="products-section">
+    <div class="products-carousel">
       <?php
 
       use App\Controllers\ProductController;

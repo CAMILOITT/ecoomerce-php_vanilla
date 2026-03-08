@@ -1,130 +1,202 @@
 <style>
   .header {
-    background: var(--color-primary);
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: var(--color-text);
     display: flex;
-    padding: 12px 8px;
+    padding: 16px 24px;
     align-items: center;
-    justify-content: space-around;
-
-    .logo {
-      font-size: 1.4rem;
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-      font-weight: bold;
-    }
-
-    .search {
-      position: relative;
-
-      &>input {
-        padding-right: 20px;
-        width: clamp(200px, 40vw, 500px);
-
-        &:focus {
-          outline: 2px solid var(--color-primary);
-        }
-      }
-
-      &>button {
-        position: absolute;
-        right: 4px;
-        border-radius: 4px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: var(--color-primary-light);
-        color: var(--color-bg);
-        padding: 3px 6px;
-        aspect-ratio: 2/1;
-      }
-    }
+    justify-content: space-between;
+    border-radius: var(--border-xl);
+    margin: 1rem 2rem;
+    box-shadow: var(--shadow-soft);
   }
 
-  @media (width <=590px) {
+  .logo {
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .logo svg {
+      width: 28px;
+      height: 28px;
+  }
+
+  .search {
+    position: relative;
+    flex: 1;
+    max-width: 500px;
+    margin: 0 2rem;
+  }
+
+  .search > input {
+    width: 100%;
+    padding: 14px 24px;
+    background: #FFFFFF;
+    border-radius: var(--pill);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    font-size: 0.95rem;
+  }
+
+  .search > input::placeholder {
+    color: #A0A0A0;
+  }
+
+  .search > input:focus {
+    outline: 2px solid var(--color-primary-light);
+    box-shadow: 0 0 0 4px rgba(240, 90, 40, 0.1);
+  }
+
+  .search > button {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    color: var(--color-text);
+    padding: 8px;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  
+  .search > button:hover {
+      background: var(--color-bg-light);
+  }
+
+  .search > button svg {
+      width: 20px;
+      height: 20px;
+  }
+
+  .menu-category, .menu-profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .menu-profile {
+      background: var(--color-pastel-orange);
+      padding: 8px;
+      border-radius: 50%;
+      transition: transform 0.2s ease;
+  }
+  
+  .menu-profile:hover {
+      transform: scale(1.05);
+  }
+
+  .menu-category {
+      background: #FFFFFF;
+      padding: 10px;
+      border-radius: var(--pill);
+      box-shadow: var(--shadow-soft);
+      transition: all 0.2s ease;
+  }
+  
+  .menu-category:hover {
+      box-shadow: var(--shadow-hover);
+  }
+
+  @media (max-width: 768px) {
     .header {
-      padding-inline: 4px;
-
+      padding: 12px;
+      margin: 1rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .search {
+        order: 3;
+        max-width: 100%;
+        margin: 0;
     }
 
-
-    .logo {
-      gap: 0px;
-
-      span {
-        display: none;
-        font-size: 1.5rem;
-      }
+    .logo span {
+      display: none;
     }
   }
 
+  /* Dropdowns */
   .menu-category,
   .menu-profile {
     position: relative;
+  }
 
-
-    &:hover {
-
-      .dropdown-category,
-      .dropdown-profile {
-        visibility: visible;
-        opacity: 1;
-        translate: 0 0;
-        display: flex;
-        opacity: 1;
-        visibility: visible;
-
-      }
-    }
-
-    svg {
-      font-size: 1.5rem;
-    }
+  .menu-category:hover .dropdown-category,
+  .menu-profile:hover .dropdown-profile {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
   }
 
   .dropdown-category {
     left: 0;
+    top: calc(100% + 10px);
   }
 
   .dropdown-profile {
     right: 0;
+    top: calc(100% + 10px);
   }
 
   .dropdown-category,
   .dropdown-profile {
     position: absolute;
-    background-color: var(--color-bg);
+    background-color: var(--color-card-bg);
     border-radius: var(--border-l);
-    padding: .5rem 1rem;
-    font-size: small;
+    padding: 1rem;
+    font-size: 0.95rem;
     display: flex;
     flex-direction: column;
-    gap: .5rem;
-    animation: animation-dropdown 200ms;
-    opacity: 0;
-    translate: 0 -10px;
-    transition: all 200ms allow-discrete ease;
+    gap: 0.8rem;
+    box-shadow: var(--shadow-hover);
+    min-width: 200px;
+    
     opacity: 0;
     visibility: hidden;
-    z-index: 2;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10;
+  }
 
-    /* https://youtube.com/shorts/QNxfHV4zlFA?si=g3or7yqhwlGXxleg */
-    li {
-      list-style: none;
+  .dropdown-category h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--color-primary);
+  }
 
-      &:hover {
-        background: var(--color-primary-light);
-        border-radius: var(--border-s);
-      }
+  .dropdown-category h4 {
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+  }
 
-      &>a {
-        display: flex;
-        gap: .3rem;
-        width: 100%;
-        padding: 4px 8px;
-        font-weight: bold;
-      }
-    }
+  .dropdown-category li, .dropdown-profile li {
+    list-style: none;
+  }
+
+  .dropdown-category li a, .dropdown-profile li a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 8px 12px;
+    font-weight: 500;
+    border-radius: var(--border-s);
+    transition: background 0.2s ease;
+  }
+
+  .dropdown-category li a:hover, .dropdown-profile li a:hover {
+    background: var(--color-bg-light);
+    color: var(--color-primary);
   }
 </style>
 
@@ -133,7 +205,7 @@
     <div class="menu-category">
       <?php include_once 'assets/svg/icons/menu-deep.svg' ?>
       <div class="dropdown-category">
-        <h3>Categoría</h3>
+        <h3>Categorías</h3>
         <?php
 
         use App\Controllers\CategoryController;
@@ -144,10 +216,9 @@
         $allSubcategories = $categoryController->getAllSubcategories();
 
         foreach ($allCategories as $category): ?>
-          <div style="display: flex; gap: .3rem;">
+          <div style="display: flex; flex-direction: column; gap: .3rem; margin-bottom: 0.5rem;">
             <h4><?= $category['name'] ?></h4>
-            <ul>
-              <!-- buscar las categorías disponibles -->
+            <ul style="padding-left: 0;">
               <?php
               $listCategories = array_filter($allSubcategories, function ($item) use ($category) {
                 return $item['parent_id'] === $category['id'];
@@ -160,21 +231,25 @@
         <?php endforeach; ?>
       </div>
     </div>
-    <?php include_once 'assets/svg/icons/shopping-cart.svg' ?>
-    <span>MINIMARKET</span>
+    <a href="/" style="display: flex; align-items: center; gap: 0.5rem;">
+        <?php include_once 'assets/svg/icons/shopping-cart.svg' ?>
+        <span>groceria.</span>
+    </a>
   </div>
+  
   <div class="search" id="user-search">
-    <input placeholder="buscar un producto..." type="search" name="input_search" id="input-search">
+    <input placeholder="Search for grocery, vegetable, spices..." type="search" name="input_search" id="input-search">
     <button id="btn-search"><?php include 'assets/svg/icons/search.svg' ?></button>
   </div>
+  
   <div class="menu-profile">
     <?php include 'assets/svg/icons/profile.svg' ?>
     <ul class="dropdown-profile">
       <li>
-        <a href="<?php echo '/profile' ?>"><?php include 'assets/svg/icons/profile.svg' ?>perfil</a>
+        <a href="<?php echo '/profile' ?>"><?php include 'assets/svg/icons/profile.svg' ?> Mi Perfil</a>
       </li>
       <li>
-        <a href="/shopping"><?php include_once 'assets/svg/icons/shopping-bag.svg' ?>carrito de compras</a>
+        <a href="/shopping"><?php include_once 'assets/svg/icons/shopping-bag.svg' ?> Ver Carrito</a>
       </li>
     </ul>
   </div>
@@ -190,7 +265,6 @@
     if (value) window.location.href = `/productos?search=${value}`
   }
 
-  console.log(search.closest('button'))
   search.addEventListener('click', (e) => {
     if (e.target.closest('button')) searchProduct()
   })

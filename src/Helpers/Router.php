@@ -17,40 +17,66 @@ class Router
     $this->middleware = $middleware;
   }
 
-  public function get(string $uri, array | string $middleware, ?string $action): void
+  public function get(string $uri, array | string $middleware, callable|string|null $action): void
   {
     $completeUri = rtrim($this->baseUrl, '/') . '/' . ltrim($uri, '/');
 
     if (is_string($middleware)) $this->middleware[] = $middleware;
     else $this->middleware = array_merge($this->middleware, $middleware);
-    $this->routes['GET'][$this->normalize($completeUri)][] = $middleware;
-    if (isset($action)) $this->routes['GET'][$this->normalize($completeUri)][] = $action;
+    $this->routes['GET'][$this->normalize($completeUri)]['middleware'] = $middleware;
+    if (isset($action)) $this->routes['GET'][$this->normalize($completeUri)]['action'] = $action;
   }
 
-  public function post(string $uri, array | string $middleware, ?string $action): void
+  public function post(string $uri, array | string $middleware, callable|string|null $action): void
   {
     $completeUri = rtrim($this->baseUrl, '/') . '/' . ltrim($uri, '/');
     if (is_string($middleware)) $this->middleware[] = $middleware;
     else $this->middleware = array_merge($this->middleware, $middleware);
-    $this->routes['POST'][$this->normalize($completeUri)][] = $middleware;
-    if (isset($action)) $this->routes['POST'][$this->normalize($completeUri)][] = $action;
+    $this->routes['POST'][$this->normalize($completeUri)]['middleware'] = $middleware;
+    if (isset($action)) $this->routes['POST'][$this->normalize($completeUri)]['action'] = $action;
   }
 
-  public function dispatch(): void
+  public function dispatch(string $uriOverride = null): bool
   {
     $method = $_SERVER['REQUEST_METHOD'];
-    $uri = $this->normalize(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+    $uri = $this->normalize($uriOverride ?? parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+    
     if (!isset($this->routes[$method][$uri])) {
-      http_response_code(404);
-      echo '404';
-      return;
+      return false; // Route not matched
     }
-    [$controller, $methodAction] = explode('@', $this->routes[$method][$uri]);
-    $controllerClass = "App\\Controllers\\$controller";
-    if (!class_exists($controllerClass)) throw new \Exception("Controller no existe");
-    $instance = new $controllerClass();
-    if (!method_exists($instance, $methodAction)) throw new \Exception("Método no existe");
-    call_user_func([$instance, $methodAction]);
+    
+    $route = $this->routes[$method][$uri];
+    $action = $route['action'] ?? null;
+    $routeMiddleware = $route['middleware'] ?? [];
+
+    // Simple middleware execution simulation
+    // Ideally this would instantiate Middleware classes
+    foreach ($routeMiddleware as $mw) {
+       $mwClass = "App\\Middleware\\" . ucfirst($mw) . "Middleware";
+       if (class_exists($mwClass)) {
+           $mwInstance = new $mwClass();
+           if (method_exists($mwInstance, 'handle')) {
+               $mwInstance->handle();
+           }
+       }
+    }
+
+    if (is_callable($action)) {
+        call_user_func($action);
+        return true;
+    }
+
+    if (is_string($action)) {
+        [$controller, $methodAction] = explode('@', $action);
+        $controllerClass = "App\\Controllers\\$controller";
+        if (!class_exists($controllerClass)) throw new \Exception("Controller no existe");
+        $instance = new $controllerClass();
+        if (!method_exists($instance, $methodAction)) throw new \Exception("Método no existe");
+        call_user_func([$instance, $methodAction]);
+        return true;
+    }
+    
+    return false;
   }
 
   private function normalize(string $uri): string

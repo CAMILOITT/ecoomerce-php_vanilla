@@ -75,71 +75,18 @@ class App
 
   function render()
   {
-
-    $this->handleFrontend();
-    // $conn = $this->conn;
-    // $path_view = realpath($this->baseViews . "/{$this->uri}/layout.php");
-    // $path_content = realpath($this->baseViews . "/{$this->uri}/index.php");
-
-    if ($this->uri === 'api/v1/products') {
-      $userController = new ProductController($this->conn);
-      $users = $userController->getAllProducts($_GET['page'] ?? 0, $_GET['limit'] ?? 10);
-      echo json_encode($users);
-      return;
-    }
-
-    if ($this->uri === 'api/v1/register') {
-      $raw = file_get_contents('php://input');
-      $data = json_decode($raw, true);
-      if (!$data) {
-        HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Datos JSON inválidos');
-        return;
+      // First try to resolve as an API route using ApiRouter
+      $apiRouter = new \App\Router\ApiRouter($this->conn);
+      
+      // We pass the full URI so the router can match it to `/api/v1/...`
+      // Notice we add a '/' to match the expected format in Router
+      $matchedApiRoute = $apiRouter->dispatch('/' . $this->uri);
+      
+      if ($matchedApiRoute) {
+          return;
       }
 
-      if (json_last_error() !== JSON_ERROR_NONE) {
-        HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Error al parsear JSON: ' . json_last_error_msg());
-      }
-      $bestProducts = new DashboardController();
-      $bestProducts->getBestProductsOfMonth($this->conn);
-      echo json_encode($bestProducts);
-      return;
-    }
-
-    if ($this->uri === 'api/v1/logout') {
-      $session = new SessionController($this->conn);
-      $session->logout();
-    }
-
-    if ($this->uri === 'api/v1/login') {
-      $raw = file_get_contents('php://input');
-      $data = json_decode($raw, true);
-      if (!$data) {
-        HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Datos JSON inválidos');
-        return;
-      }
-
-      if (json_last_error() !== JSON_ERROR_NONE) {
-        HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Error al parsear JSON: ' . json_last_error_msg());
-        return;
-      }
-
-      $userEmail = $data['email'] ?? '';
-      $password = $data['password'] ?? '';
-      if ($userEmail === "" || $password === "") {
-        HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Usuario y contraseña son requeridos');
-        return null;
-      }
-      $session = new SessionController($this->conn);
-      $session->login($userEmail, $password);
-      return;
-    }
-
-    // if (!$path_view) {
-    //   $path_view = realpath($this->baseViews . "/{$this->uri}/../layout.php");
-    //   include $path_view;
-    //   return;
-    // }
-
-    // include $path_view;
+      // If it wasn't an API route, serve the frontend
+      $this->handleFrontend();
   }
 }

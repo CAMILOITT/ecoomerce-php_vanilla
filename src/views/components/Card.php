@@ -1,92 +1,160 @@
 <style>
   .card {
+    background: var(--color-card-bg);
     border-radius: var(--border-xl);
-    padding: 12px 12px;
-    width: 200px;
+    padding: 16px;
+    width: 240px;
+    min-width: 240px;
     aspect-ratio: 4/5;
-    background-color: red;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
 
-    .card-attr {
+  .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+  }
+
+  .card-link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: inherit;
+  }
+  
+  .img-container {
+      position: relative;
+      border-radius: var(--border-l);
+      width: 100%;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      padding: 1rem;
+  }
+  
+  /* Generating dynamic pastel backgrounds based on card index */
+  .card:nth-child(4n+1) .img-container { background: var(--color-pastel-orange);  }
+  .card:nth-child(4n+2) .img-container { background: var(--color-pastel-red);  }
+  .card:nth-child(4n+3) .img-container { background: var(--color-pastel-green);  }
+  .card:nth-child(4n+4) .img-container { background: var(--color-pastel-purple);  }
+
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover .card-img {
+      transform: scale(1.15);
+  }
+  
+  .item-discount {
       position: absolute;
       top: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: calc(100% - 10px *2);
-      background: red;
-    }
-
-    .card-link {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      text-align: center;
-
-      .item-name {
-        font-weight: bold;
-      }
-
-      .item-description {
-        font-size: .8rem;
-      }
-    }
-
-    .img-container {
-      border-radius: var(--border-m);
-      overflow: hidden;
-      width: 180px;
-      aspect-ratio: 1/1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      .card-img {
-        object-position: center;
-        width: 100%;
-        height: 100%;
-        aspect-ratio: 1/1;
-      }
-    }
-
-    .item_amount {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      gap: .5rem;
-      font-weight: bold;
-      margin-block-start: .5rem;
-
-    }
+      left: 12px;
+      background: rgba(255,255,255,0.9);
+      color: var(--color-text);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: var(--pill);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      z-index: 1;
   }
+
+  .card-info {
+      text-align: center;
+      margin-bottom: auto;
+  }
+
+  .item-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-text);
+    margin-bottom: 4px;
+  }
+
+  .item-description {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 10px;
+  }
+
+  .item-price {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--color-text);
+  }
+
+  .item-action-btn {
+      background: white;
+      border: 1px solid #EAEAEA;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text);
+      font-weight: bold;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      padding: 0;
+  }
+  
+  .item-action-btn:hover {
+      background: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+  }
+
 </style>
 
 <div class="card">
-  <a href="/products/<?= $item['id'] ?>" class="card-link">
-    <div class="card-attr">
-      <?php if ($item['discount'] > 0): ?>
-        <span class="item-discount">discount</span>
-      <?php endif; ?>
+  <?php if (isset($item['discount']) && $item['discount'] > 0): ?>
+    <span class="item-discount"><?= $item['discount'] ?>% off</span>
+  <?php endif; ?>
 
-      <span class="item-price">
-        <?= $item['unit_price']; ?>
-      </span>
-    </div>
+  <a href="/products/<?= $item['id'] ?>" class="card-link">
     <div class="img-container">
-      <img src="https://i.pinimg.com/736x/82/7c/44/827c44b706d30d9d432776fab3ee998c.jpg" alt="img fruta" class="card-img">
+      <!-- In a real app we would use $item['image_url']. Using placeholder to match reference -->
+      <img src="https://cdn-icons-png.flaticon.com/512/2909/2909805.png" alt="img fruta" class="card-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3081/3081986.png';">
     </div>
+    
     <div class="card-info">
-      <p class="item-name"><?= $item['name']; ?></p>
-      <span class="item-description"><?= $item['description']; ?></span>
+      <p class="item-name"><?= htmlspecialchars($item['name']); ?></p>
+      <span class="item-description"><?= htmlspecialchars($item['description']); ?></span>
     </div>
   </a>
-  <div class="item_amount">
-    <button class="item-rest">-</button>
-    <span class="item_amount-total">0</span>
-    <button class="item-add">+</button>
+  
+  <div class="card-footer">
+    <span class="item-price">$<?= number_format((float)($item['unit_price'] ?? 0), 2); ?></span>
+    
+    <button class="item-action-btn" aria-label="Add to cart">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+    </button>
   </div>
 </div>
