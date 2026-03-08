@@ -1,36 +1,45 @@
 <style>
   .products-section {
-    padding: 1rem 0 3rem 0;
+    padding: 1rem 0;
   }
-  
+
   .products-carousel {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
     gap: 1.5rem;
-    align-items: stretch;
-    overflow-x: auto;
-    padding: 1rem 0.5rem 2rem 0.5rem;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  
-  .products-carousel::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .products-carousel > * {
+    margin: 1rem 0.5rem 2rem;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &>* {
       scroll-snap-align: start;
+    }
   }
+
+  @media (width <=375px) {
+    .products-carousel {
+      gap: .25rem;
+    }
+  }
+
+  /* main {
+    border-radius: var(--border-xl);
+    background: linear-gradient(180deg, var(--color-primary), transparent);
+
+    margin: 1rem .5rem;
+  } */
 </style>
 
 <main>
   <?php include_once __DIR__ . '/components/Banner.php' ?>
-  
+
   <section class="products-section">
     <div class="products-carousel">
       <?php
-
       use App\Controllers\ProductController;
 
       $productsController = new ProductController($conn);

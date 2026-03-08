@@ -2,10 +2,11 @@
   .card {
     background: var(--color-card-bg);
     border-radius: var(--border-xl);
-    padding: 16px;
-    width: 240px;
-    min-width: 240px;
-    aspect-ratio: 4/5;
+    padding: clamp(.5rem, 2%, 1rem);
+    min-width: 150px;
+    width: clamp(150px, 40vw, 240px);
+    max-width: 240px;
+    aspect-ratio: 5/7;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -13,11 +14,11 @@
     box-shadow: var(--shadow-soft);
     transition: all 0.3s ease;
     cursor: pointer;
-  }
 
-  .card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
   }
 
   .card-link {
@@ -31,7 +32,8 @@
     position: relative;
     border-radius: var(--border-l);
     width: 100%;
-    height: 160px;
+    aspect-ratio: 1/1;
+    /* height: 160px; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -39,7 +41,6 @@
     padding: 1rem;
   }
 
-  /* Generating dynamic pastel backgrounds based on card index */
   .card:nth-child(4n+1) .img-container {
     background: var(--color-pastel-orange);
   }
@@ -138,6 +139,18 @@
       border-color: var(--color-primary);
     }
   }
+
+  @media (width <=768px) {
+
+    .item-price {
+      font-size: 1rem;
+    }
+    
+    .item-action-btn {
+      width: 28px;
+      height: 28px;
+    }
+  }
 </style>
 
 <div class="card">
@@ -147,9 +160,7 @@
 
   <a href="/products/<?= $item['id'] ?>" class="card-link">
     <div class="img-container">
-      <!-- In a real app we would use $item['image_url']. Using placeholder to match reference -->
-      <img src="https://cdn-icons-png.flaticon.com/512/2909/2909805.png" alt="img fruta" class="card-img"
-        onerror="this.src='https://cdn-icons-png.flaticon.com/512/3081/3081986.png';">
+      <img src="https://cdn-icons-png.flaticon.com/512/2909/2909805.png" alt="img fruta" class="card-img">
     </div>
 
     <div class="card-info">
@@ -162,11 +173,7 @@
     <span class="item-price">$<?= number_format((float) ($item['unit_price'] ?? 0), 2); ?></span>
 
     <button class="item-action-btn" aria-label="Add to cart">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-        stroke-linecap="round" stroke-linejoin="round">
-        <line x1="12" y1="5" x2="12" y2="19"></line>
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-      </svg>
+      <?php include 'assets/svg/icons/more.svg' ?>
     </button>
   </div>
 </div>
