@@ -226,7 +226,7 @@
                 return $item['parent_id'] === $category['id'];
               });
               foreach ($listCategories as $subcategory): ?>
-                <li><a href="/productos?category=<?= $subcategory['name'] ?>"><?= $subcategory['name'] ?></a></li>
+                <li><a href="/products?category=<?= $subcategory['name'] ?>"><?= $subcategory['name'] ?></a></li>
               <?php endforeach; ?>
             </ul>
           </div>
@@ -264,7 +264,7 @@
   function searchProduct() {
     const input = search.querySelector('input')
     const value = input.value.trim()
-    if (value) window.location.href = `/productos?search=${value}`
+    if (value) window.location.href = `/products?search=${value}`
   }
 
   search.addEventListener('click', (e) => {

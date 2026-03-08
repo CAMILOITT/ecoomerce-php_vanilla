@@ -3,9 +3,7 @@
     background: var(--color-card-bg);
     border-radius: var(--border-xl);
     padding: clamp(.5rem, 2%, 1rem);
-    min-width: 150px;
-    width: clamp(150px, 40vw, 240px);
-    max-width: 240px;
+    width: clamp(150px, 15vw, 240px);
     aspect-ratio: 5/7;
     position: relative;
     display: flex;
@@ -145,7 +143,7 @@
     .item-price {
       font-size: 1rem;
     }
-    
+
     .item-action-btn {
       width: 28px;
       height: 28px;
