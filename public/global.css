@@ -9,24 +9,27 @@
   --pill: 9999px;
 
   /* Color Palette - Vibrant & Pastel */
-  --color-bg-light: #FDF1E3; /* Top gradient */
-  --color-bg-dark: #F3DECF; /* Bottom gradient */
+  --color-bg-light: #FDF1E3;
+  /* Top gradient */
+  --color-bg-dark: #F3DECF;
+  /* Bottom gradient */
 
-  --color-primary: #F05A28; /* The vibrant orange CTA */
+  --color-primary: #F05A28;
+  /* The vibrant orange CTA */
   --color-primary-light: #FF774A;
   --color-primary-dark: #D44415;
-  
+
   /* Pastels for Cards */
   --color-pastel-orange: #FCE1C6;
   --color-pastel-red: #FEE0E2;
   --color-pastel-green: #E8F5D8;
   --color-pastel-purple: #F3E8FE;
-  
+
   /* UI Colors */
   --color-card-bg: #FFFFFF;
   --color-text: #333333;
   --color-text-muted: #777777;
-  
+
   --color-success: #3ab960;
   --color-warning: #e99037;
   --color-error: #E94F37;
@@ -65,7 +68,8 @@
 button,
 input {
   font-size: 1rem;
-  border-radius: var(--pill); /* pill shaped inputs/buttons by default */
+  border-radius: var(--pill);
+  /* pill shaped inputs/buttons by default */
   padding: 12px 24px;
   transition: all 0.3s ease;
 }
@@ -92,21 +96,28 @@ body {
   flex-direction: column;
 }
 
-main {
+/* main {
   flex: 1;
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
-}
+} */
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   text-wrap: balance;
   color: var(--color-text);
   font-weight: 700;
 }
 
-p, a, img {
+p,
+a,
+img {
   text-wrap: pretty;
 }
 

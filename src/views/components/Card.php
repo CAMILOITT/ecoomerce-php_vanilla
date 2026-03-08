@@ -16,8 +16,8 @@
   }
 
   .card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-hover);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
   }
 
   .card-link {
@@ -26,55 +26,66 @@
     height: 100%;
     color: inherit;
   }
-  
+
   .img-container {
-      position: relative;
-      border-radius: var(--border-l);
-      width: 100%;
-      height: 160px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 12px;
-      padding: 1rem;
+    position: relative;
+    border-radius: var(--border-l);
+    width: 100%;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    padding: 1rem;
   }
-  
+
   /* Generating dynamic pastel backgrounds based on card index */
-  .card:nth-child(4n+1) .img-container { background: var(--color-pastel-orange);  }
-  .card:nth-child(4n+2) .img-container { background: var(--color-pastel-red);  }
-  .card:nth-child(4n+3) .img-container { background: var(--color-pastel-green);  }
-  .card:nth-child(4n+4) .img-container { background: var(--color-pastel-purple);  }
+  .card:nth-child(4n+1) .img-container {
+    background: var(--color-pastel-orange);
+  }
+
+  .card:nth-child(4n+2) .img-container {
+    background: var(--color-pastel-red);
+  }
+
+  .card:nth-child(4n+3) .img-container {
+    background: var(--color-pastel-green);
+  }
+
+  .card:nth-child(4n+4) .img-container {
+    background: var(--color-pastel-purple);
+  }
 
   .card-img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
     transform: scale(1.1);
     transition: transform 0.3s ease;
   }
-  
+
   .card:hover .card-img {
-      transform: scale(1.15);
+    transform: scale(1.15);
   }
-  
+
   .item-discount {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: rgba(255,255,255,0.9);
-      color: var(--color-text);
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 4px 8px;
-      border-radius: var(--pill);
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-      z-index: 1;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--color-text);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: var(--pill);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    z-index: 1;
   }
 
   .card-info {
-      text-align: center;
-      margin-bottom: auto;
+    text-align: center;
+    margin-bottom: auto;
   }
 
   .item-name {
@@ -92,42 +103,41 @@
   }
 
   .card-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: auto;
-      padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 10px;
   }
 
   .item-price {
-      font-weight: 700;
-      font-size: 1.2rem;
-      color: var(--color-text);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--color-text);
   }
 
   .item-action-btn {
-      background: white;
-      border: 1px solid #EAEAEA;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--color-text);
-      font-weight: bold;
-      transition: all 0.2s ease;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-      padding: 0;
-  }
-  
-  .item-action-btn:hover {
+    background: white;
+    border: 1px solid #EAEAEA;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text);
+    font-weight: bold;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    padding: 0;
+
+    &:hover {
       background: var(--color-primary);
       color: white;
       border-color: var(--color-primary);
+    }
   }
-
 </style>
 
 <div class="card">
@@ -138,23 +148,25 @@
   <a href="/products/<?= $item['id'] ?>" class="card-link">
     <div class="img-container">
       <!-- In a real app we would use $item['image_url']. Using placeholder to match reference -->
-      <img src="https://cdn-icons-png.flaticon.com/512/2909/2909805.png" alt="img fruta" class="card-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3081/3081986.png';">
+      <img src="https://cdn-icons-png.flaticon.com/512/2909/2909805.png" alt="img fruta" class="card-img"
+        onerror="this.src='https://cdn-icons-png.flaticon.com/512/3081/3081986.png';">
     </div>
-    
+
     <div class="card-info">
       <p class="item-name"><?= htmlspecialchars($item['name']); ?></p>
       <span class="item-description"><?= htmlspecialchars($item['description']); ?></span>
     </div>
   </a>
-  
+
   <div class="card-footer">
-    <span class="item-price">$<?= number_format((float)($item['unit_price'] ?? 0), 2); ?></span>
-    
+    <span class="item-price">$<?= number_format((float) ($item['unit_price'] ?? 0), 2); ?></span>
+
     <button class="item-action-btn" aria-label="Add to cart">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+        stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
     </button>
   </div>
 </div>

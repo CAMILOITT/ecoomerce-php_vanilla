@@ -1,16 +1,16 @@
 <style>
   .header {
     background: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); */
     color: var(--color-text);
     display: flex;
     padding: 16px 24px;
     align-items: center;
     justify-content: space-between;
-    border-radius: var(--border-xl);
-    margin: 1rem 2rem;
-    box-shadow: var(--shadow-soft);
+    /* border-radius: var(--border-xl); */
+    /* margin: 1rem 2rem; */
+    /* box-shadow: var(--shadow-soft); */
   }
 
   .logo {
@@ -20,11 +20,11 @@
     gap: .8rem;
     font-weight: 700;
     color: var(--color-text);
-  }
 
-  .logo svg {
+    svg {
       width: 28px;
       height: 28px;
+    }
   }
 
   .search {
@@ -32,78 +32,80 @@
     flex: 1;
     max-width: 500px;
     margin: 0 2rem;
-  }
 
-  .search > input {
-    width: 100%;
-    padding: 14px 24px;
-    background: #FFFFFF;
-    border-radius: var(--pill);
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-    font-size: 0.95rem;
-  }
+    &>input {
+      width: 100%;
+      padding: 14px 24px;
+      background: #FFFFFF;
+      border-radius: var(--pill);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+      font-size: 0.95rem;
+    }
 
-  .search > input::placeholder {
-    color: #A0A0A0;
-  }
+    &>input::placeholder {
+      color: #A0A0A0;
+    }
 
-  .search > input:focus {
-    outline: 2px solid var(--color-primary-light);
-    box-shadow: 0 0 0 4px rgba(240, 90, 40, 0.1);
-  }
+    &>input:focus {
+      outline: 2px solid var(--color-primary-light);
+      box-shadow: 0 0 0 4px rgba(240, 90, 40, 0.1);
+    }
 
-  .search > button {
-    position: absolute;
-    right: 6px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    color: var(--color-text);
-    padding: 8px;
-    aspect-ratio: 1/1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-  }
-  
-  .search > button:hover {
+    &>button {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      color: var(--color-text);
+      padding: 8px;
+      aspect-ratio: 1/1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    &>button:hover {
       background: var(--color-bg-light);
-  }
+    }
 
-  .search > button svg {
+    &>button svg {
       width: 20px;
       height: 20px;
+    }
   }
 
-  .menu-category, .menu-profile {
+  .menu-category,
+  .menu-profile {
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    z-index: 2;
   }
 
   .menu-profile {
-      background: var(--color-pastel-orange);
-      padding: 8px;
-      border-radius: 50%;
-      transition: transform 0.2s ease;
-  }
-  
-  .menu-profile:hover {
+    background: var(--color-pastel-orange);
+    padding: 8px;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+
+    &:hover {
       transform: scale(1.05);
+    }
   }
 
   .menu-category {
-      background: #FFFFFF;
-      padding: 10px;
-      border-radius: var(--pill);
-      box-shadow: var(--shadow-soft);
-      transition: all 0.2s ease;
-  }
-  
-  .menu-category:hover {
+    background: #FFFFFF;
+    padding: 10px;
+    border-radius: var(--pill);
+    box-shadow: var(--shadow-soft);
+    transition: all 0.2s ease;
+
+    &:hover {
       box-shadow: var(--shadow-hover);
+    }
   }
 
   @media (max-width: 768px) {
@@ -113,11 +115,11 @@
       flex-wrap: wrap;
       gap: 1rem;
     }
-    
+
     .search {
-        order: 3;
-        max-width: 100%;
-        margin: 0;
+      order: 3;
+      max-width: 100%;
+      margin: 0;
     }
 
     .logo span {
@@ -125,7 +127,6 @@
     }
   }
 
-  /* Dropdowns */
   .menu-category,
   .menu-profile {
     position: relative;
@@ -160,30 +161,32 @@
     gap: 0.8rem;
     box-shadow: var(--shadow-hover);
     min-width: 200px;
-    
+
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index: 10;
+    z-index: 1;
   }
 
   .dropdown-category h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-      color: var(--color-primary);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
   }
 
   .dropdown-category h4 {
-      font-size: 0.95rem;
-      color: var(--color-text-muted);
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
   }
 
-  .dropdown-category li, .dropdown-profile li {
+  .dropdown-category li,
+  .dropdown-profile li {
     list-style: none;
   }
 
-  .dropdown-category li a, .dropdown-profile li a {
+  .dropdown-category li a,
+  .dropdown-profile li a {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -194,7 +197,8 @@
     transition: background 0.2s ease;
   }
 
-  .dropdown-category li a:hover, .dropdown-profile li a:hover {
+  .dropdown-category li a:hover,
+  .dropdown-profile li a:hover {
     background: var(--color-bg-light);
     color: var(--color-primary);
   }
@@ -232,16 +236,16 @@
       </div>
     </div>
     <a href="/" style="display: flex; align-items: center; gap: 0.5rem;">
-        <?php include_once 'assets/svg/icons/shopping-cart.svg' ?>
-        <span>groceria.</span>
+      <?php include_once 'assets/svg/icons/shopping-cart.svg' ?>
+      <span>MINIMARKET</span>
     </a>
   </div>
-  
+
   <div class="search" id="user-search">
     <input placeholder="Search for grocery, vegetable, spices..." type="search" name="input_search" id="input-search">
     <button id="btn-search"><?php include 'assets/svg/icons/search.svg' ?></button>
   </div>
-  
+
   <div class="menu-profile">
     <?php include 'assets/svg/icons/profile.svg' ?>
     <ul class="dropdown-profile">

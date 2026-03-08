@@ -8,17 +8,15 @@
     gap: 1.5rem;
     align-items: stretch;
     overflow-x: auto;
-    padding: 1rem 0.5rem 2rem 0.5rem; /* extra padding for hover shadows */
+    padding: 1rem 0.5rem 2rem 0.5rem;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-    
-    /* Hide scrollbar for cleaner look but keep functionality */
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
   
   .products-carousel::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+    display: none;
   }
   
   .products-carousel > * {
