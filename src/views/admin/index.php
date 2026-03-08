@@ -23,8 +23,7 @@
       font-size: 24px;
     }
   </style>
-  <div style="display: flex
-    ;">
+  <div style="display: flex;">
     <div>
       <canvas id='myChart'></canvas>
       <script>

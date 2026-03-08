@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Helpers;
+namespace App\Utils;
 
-
-use PDO;
 use App\Types\CodeStatusHttp;
-use App\Utils\HandleHttp;
+use PDO;
 
-class App
+class HandleHttpFrontend
 {
+
   private string $baseViews;
   private string $uri;
 
@@ -49,6 +48,7 @@ class App
       include_once $path_view;
       return;
     }
+
     $path_content = realpath($this->baseViews . "/{$this->uri}/index.php");
     $path_view = realpath($this->baseViews . "/{$this->uri}/layout.php");
     if (!$path_view) {
@@ -58,15 +58,4 @@ class App
     }
     include $path_view;
   }
-
-  function render()
-  {
-    $apiRouter = new \App\Router\ApiRouter($this->conn);
-    $matchedApiRoute = $apiRouter->dispatch('/' . $this->uri);
-
-    if ($matchedApiRoute)
-      return;
-
-    $this->handleFrontend();
-  }
-}
+};

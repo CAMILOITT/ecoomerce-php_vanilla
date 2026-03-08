@@ -20,13 +20,17 @@
 
 <style>
   body {
+    width: 100vw;
     display: flex;
-    position: relative;
+    flex-direction: row;
+    /* position: relative; */
   }
 
   .main {
+    width: max-content;
     width: 100%;
     height: 100vh;
+
     overflow-y: scroll;
   }
 </style>

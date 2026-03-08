@@ -13,19 +13,15 @@
     display: flex;
     gap: 1rem;
 
-    .list-products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      overflow-y: scroll;
-      width: 100%;
-    }
   }
 </style>
 
 <body style="height: 100vh;">
   <?php include_once __DIR__ . '/../components/Header.php' ?>
-  <?php include_once $path_content ?>
+  <main>
+    <?php include_once __DIR__ . '/components/Filtro.php' ?>
+    <?php include_once $path_content ?>
+  </main>
   <?php include_once __DIR__ . '/../components/Footer.php' ?>
 </body>
 

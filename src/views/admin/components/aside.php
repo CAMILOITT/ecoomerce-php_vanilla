@@ -2,7 +2,7 @@
   .aside-admin {
     width: 150px;
     height: 100vh;
-    position: sticky;
+    /* position: sticky; */
     top: 0;
     right: 0;
     background-color: #f0f0f0;
