@@ -2,7 +2,7 @@
   .card {
     background: var(--color-card-bg);
     border-radius: var(--border-xl);
-    padding: clamp(.5rem, 2%, 1rem);
+    padding: clamp(.5rem, 1vw, 1rem);
     width: clamp(150px, 15vw, 240px);
     aspect-ratio: 5/7;
     position: relative;

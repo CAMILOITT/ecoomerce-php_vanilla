@@ -1,3 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Controllers\CategoryController;
+
+$categoryController = new CategoryController($conn);
+
+$allCategories = $categoryController->getAllCategories();
+$allSubcategories = $categoryController->getAllSubcategories();
+?>
+
 <style>
   .header {
     background: rgba(255, 255, 255, 0.4);
@@ -24,55 +36,6 @@
     svg {
       width: 28px;
       height: 28px;
-    }
-  }
-
-  .search {
-    position: relative;
-    flex: 1;
-    max-width: 500px;
-    margin: 0 2rem;
-
-    &>input {
-      width: 100%;
-      padding: 14px 24px;
-      background: #FFFFFF;
-      border-radius: var(--pill);
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
-      font-size: 0.95rem;
-    }
-
-    &>input::placeholder {
-      color: #A0A0A0;
-    }
-
-    &>input:focus {
-      outline: 2px solid var(--color-primary-light);
-      box-shadow: 0 0 0 4px rgba(240, 90, 40, 0.1);
-    }
-
-    &>button {
-      position: absolute;
-      right: 6px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: transparent;
-      color: var(--color-text);
-      padding: 8px;
-      aspect-ratio: 1/1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-    }
-
-    &>button:hover {
-      background: var(--color-bg-light);
-    }
-
-    &>button svg {
-      width: 20px;
-      height: 20px;
     }
   }
 
@@ -200,6 +163,59 @@
       color: var(--color-primary);
     }
   }
+
+  .container-category {
+    display: flex;
+  }
+
+  .category {
+    display: flex;
+    flex-direction: column;
+
+  }
+
+  .subcategory {
+    display: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    visibility: hidden;
+
+    &.active {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+  }
+
+  .category {
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 0.5rem;
+    min-width: 120px;
+    border-right: 1px solid var(--color-bg-light);
+    margin-right: 1rem;
+
+    li {
+      padding: 6px 12px;
+      cursor: pointer;
+      border-radius: var(--border-s);
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: var(--color-bg-light);
+        color: var(--color-primary);
+      }
+    }
+  }
+
+  /* style="padding-left: 0;" */
+  /* style="display: flex; flex-direction: column; gap: .3rem; margin-bottom: 0.5rem;" */
 </style>
 
 <header class="header">
@@ -208,19 +224,16 @@
       <?php include_once 'assets/svg/icons/menu-deep.svg' ?>
       <div class="dropdown-category">
         <h3>Categorías</h3>
-        <?php
-
-        use App\Controllers\CategoryController;
-
-        $categoryController = new CategoryController($conn);
-
-        $allCategories = $categoryController->getAllCategories();
-        $allSubcategories = $categoryController->getAllSubcategories();
-
-        foreach ($allCategories as $category): ?>
-          <div style="display: flex; flex-direction: column; gap: .3rem; margin-bottom: 0.5rem;">
-            <h4><?= $category['name'] ?></h4>
-            <ul style="padding-left: 0;">
+        <div class="container-category">
+          <ul class="category" style="--category-name:<?= $category['name'] ?>;">
+            <?php foreach ($allCategories as $category): ?>
+              <li>
+                <?= $category['name'] ?>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+          <?php foreach ($allCategories as $category): ?>
+            <ul class="subcategory" data-category="<?= $category['name'] ?>">
               <?php
               $listCategories = array_filter($allSubcategories, function ($item) use ($category) {
                 return $item['parent_id'] === $category['id'];
@@ -229,8 +242,23 @@
                 <li><a href="/products?category=<?= $subcategory['name'] ?>"><?= $subcategory['name'] ?></a></li>
               <?php endforeach; ?>
             </ul>
-          </div>
-        <?php endforeach; ?>
+          <?php endforeach; ?>
+        </div>
+        <script>
+          const categories = document.querySelectorAll('.category li');
+          const subcategories = document.querySelectorAll('.subcategory');
+          categories.forEach((cat) => {
+            cat.addEventListener('mouseenter', () => {
+              const name = cat.innerHTML.trim();
+              subcategories.forEach((sub) => {
+                sub.classList.toggle(
+                  'active',
+                  sub.dataset.category === name
+                );
+              });
+            });
+          });
+        </script>
       </div>
     </div>
     <a href="/" style="display: flex; align-items: center; gap: 0.5rem;">
@@ -238,12 +266,7 @@
       <span>MINIMARKET</span>
     </a>
   </div>
-
-  <div class="search" id="user-search">
-    <input placeholder="Search for grocery, vegetable, spices..." type="search" name="input_search" id="input-search">
-    <button id="btn-search"><?php include 'assets/svg/icons/search.svg' ?></button>
-  </div>
-
+  <?php include 'Search.php' ?>
   <div class="menu-profile">
     <?php include 'assets/svg/icons/profile.svg' ?>
     <ul class="dropdown-profile">
@@ -251,27 +274,8 @@
         <a href="<?php echo '/profile' ?>"><?php include 'assets/svg/icons/profile.svg' ?> Mi Perfil</a>
       </li>
       <li>
-        <a href="/shopping"><?php include_once 'assets/svg/icons/shopping-bag.svg' ?> Ver Carrito</a>
+        <a href="/shopping_cart"><?php include_once 'assets/svg/icons/shopping-bag.svg' ?> Ver Carrito</a>
       </li>
     </ul>
   </div>
 </header>
-
-<script>
-  const search = document.querySelector('#user-search')
-  const btnSearch = document.querySelector('#btn-search')
-
-  function searchProduct() {
-    const input = search.querySelector('input')
-    const value = input.value.trim()
-    if (value) window.location.href = `/products?search=${value}`
-  }
-
-  search.addEventListener('click', (e) => {
-    if (e.target.closest('button')) searchProduct()
-  })
-
-  search.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') searchProduct()
-  })
-</script>
