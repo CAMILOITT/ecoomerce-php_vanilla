@@ -12,7 +12,7 @@ Este es una tienda simple tienda virtual desarrollada con php puro, el cual perm
 ## Requisitos
 
 - Servidor web con soporte PHP (por ejemplo, XAMPP, WAMP, LAMP).
-- php versión 7.0 o superior.
+- php versión 8.0 o superior.
 - composer para la gestión de dependencias.
 - Base de datos MySQL.
 
