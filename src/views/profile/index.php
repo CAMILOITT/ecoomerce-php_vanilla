@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 use App\Controllers\CustomerController;
 
-if (!isset($_SESSION['id'])) {
+if (!$_SESSION['id']) {
   header('Location: /session');
-  exit;
+  exit();
 }
 
 $customerController = new CustomerController($conn);
-$user = $customerController->getInformation($_SESSION['customer_id']);
-$history = $customerController->getPurchaseHistoryByCustomerId($_SESSION['customer_id']);
+$user = $customerController->getInformation($_SESSION['id']);
+$history = $customerController->getPurchaseHistoryByCustomerId($_SESSION['id']);
 ?>
 
 <main>

@@ -49,13 +49,16 @@ class App
       include_once $path_view;
       return;
     }
+
     $path_content = realpath($this->baseViews . "/{$this->uri}/index.php");
     $path_view = realpath($this->baseViews . "/{$this->uri}/layout.php");
+
     if (!$path_view) {
       $path_view = realpath($this->baseViews . "/{$this->uri}/../layout.php");
       include $path_view;
       return;
     }
+
     include $path_view;
   }
 

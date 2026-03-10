@@ -25,11 +25,11 @@ class SessionController
   public function loginCustomer(string $userEmail, string $password)
   {
     // 1. Extraer y verificar el token CSRF del formulario.
-    $token = $_POST['csrf_token'] ?? '';
-    if (!Csrf::verifyToken($token)) {
-      HandleHttp::error(CodeStatusHttp::FORBIDDEN, 'Solicitud no válida (Invalid CSRF token).');
-      return;
-    }
+    // $token = $_POST['csrf_token'] ?? '';
+    // if (!Csrf::verifyToken($token)) {
+    //   HandleHttp::error(CodeStatusHttp::FORBIDDEN, 'Solicitud no válida (Invalid CSRF token).');
+    //   return;
+    // }
 
     $userData = (new CustomerController($this->connection))->getByEmail($userEmail);
     if (!$userData) {
@@ -48,11 +48,11 @@ class SessionController
   public function loginStaff(string $userEmail, string $password)
   {
     // 1. Extraer y verificar el token CSRF del formulario.
-    $token = $_POST['csrf_token'] ?? '';
-    if (!Csrf::verifyToken($token)) {
-      HandleHttp::error(CodeStatusHttp::FORBIDDEN, 'Solicitud no válida (Invalid CSRF token).');
-      return;
-    }
+    // $token = $_POST['csrf_token'] ?? '';
+    // if (!Csrf::verifyToken($token)) {
+    //   HandleHttp::error(CodeStatusHttp::FORBIDDEN, 'Solicitud no válida (Invalid CSRF token).');
+    //   return;
+    // }
 
     // NOTA: El método getByEmail en StaffController necesita ser implementado.
     $userData = (new StaffController($this->connection))->getByEmail($userEmail);
