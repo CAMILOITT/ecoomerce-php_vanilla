@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 use App\Controllers\ShoppingCart;
 
-// session_start();
+if (isset($_SESSION['customer_id']))
+  $products = (new ShoppingCart($conn))->getAllProductsByCustomerId($_SESSION['customer_id']);
 
-$_SESSION['customer_id'] = 1;
-
-$products = (new ShoppingCart($conn))->getAllProductsByCustomerId($_SESSION['customer_id']);
 ?>
 
 <style>
+  h1 {
+    margin: 2rem 1rem 3rem;
+  }
+
   .shopping-cart {
     display: flex;
     flex-direction: column;
@@ -23,12 +25,20 @@ $products = (new ShoppingCart($conn))->getAllProductsByCustomerId($_SESSION['cus
 </style>
 
 <h1>Carrito de Compras</h1>
-<div class="shopping-cart">
-  <?php if (count($products) > 0): ?>
-    <?php foreach ($products as $product): ?>
-      <?php include_once __DIR__ . '/components/itemShop.php'; ?>
-    <?php endforeach; ?>
-  <?php else: ?>
+
+<?php if (isset($_SESSION['customer_id'])): ?>
+  <div class="shopping-cart">
+    <?php if (count($products) > 0): ?>
+      <?php foreach ($products as $product): ?>
+        <?php include_once __DIR__ . '/components/itemShop.php'; ?>
+      <?php endforeach; ?>
+    <?php else: ?>
+      <p>Bienvenido a tu carrito de compras</p>
+    <?php endif; ?>
+  </div>
+
+<?php else: ?>
+  <div class="shopping-cart">
     <p>Bienvenido a tu carrito de compras</p>
-  <?php endif; ?>
-</div>
+  </div>
+<?php endif; ?>

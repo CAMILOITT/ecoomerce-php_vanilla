@@ -77,10 +77,11 @@
   const form = document.querySelector('.form')
   form.addEventListener('submit', (event) => {
     event.preventDefault()
+    console.log(urls);
+
     const dataInputs = new FormData(form)
     const data = Object.fromEntries(dataInputs.entries())
     const url = window.location.origin + '/api/v1/login'
-    const urlRef = document.referrer ? new URL(document.referrer) : new URL('https://p.com')
 
     fetch(url, {
         method: "POST",
@@ -89,14 +90,16 @@
         },
         body: JSON.stringify(data)
       }).then(response => {
-        if (!response.ok) throw new Error('Error al iniciar session');
+        if (!response.ok) throw new Error('Erro al iniciar session');
         return response.json()
       })
       .then(res => {
-        if (res.data.success) urlRef.hostname === window.location.hostname ? window.history.back() : window.location.href = '/'
+        if (res.data.success) window.location.href = res.data.redirect
         else document.querySelector('.message-error').style.display = 'block'
+
       })
       .catch(error => {
+        console.error('Error:', error);
         alert('Error al iniciar sesión. Por favor, inténtalo de nuevo.');
       })
   })

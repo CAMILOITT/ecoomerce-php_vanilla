@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Controllers\CustomerController;
 
-if (!isset($_SESSION['customer_id'])) {
+if (!isset($_SESSION['id'])) {
   header('Location: /session');
   exit;
 }

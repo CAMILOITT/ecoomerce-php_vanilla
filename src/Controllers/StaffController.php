@@ -11,6 +11,15 @@ class StaffController extends Controller
 {
   private $table = 'staff';
 
+  public function getByEmail(string $email)
+  {
+    $query = "SELECT * FROM {$this->table} WHERE email = :email";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([':email' => $email]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ?: null;
+  }
+
   public function getAll(int $page = 0, int $limit = 10)
   {
     $offset = $page * $limit;

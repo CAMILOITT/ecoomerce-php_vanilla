@@ -12,10 +12,16 @@ class DashboardController
 
   public function getBestProductsOfMonth(PDO $connection)
   {
-    $stmt = $connection->prepare('SELECT name, count(name) as amount FROM products WHERE MONTH(created_at) = MONTH(CURRENT_DATE()) AND YEAR(created_at) = YEAR(CURRENT_DATE())');
+    $query = 'SELECT p.name, COUNT(sd.product_id) as amount
+              FROM sales_details sd
+              JOIN products p ON sd.product_id = p.id
+              JOIN sales s ON sd.sale_id = s.id
+              WHERE MONTH(s.bill_date) = MONTH(CURRENT_DATE()) AND YEAR(s.bill_date) = YEAR(CURRENT_DATE())
+              GROUP BY p.name
+              ORDER BY amount DESC
+              LIMIT 10;';
+    $stmt = $connection->prepare($query);
     $stmt->execute();
-    $bestProducts = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    return $bestProducts;
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 }

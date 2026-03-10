@@ -2,8 +2,7 @@
   .filtro {
     width: 200px;
     margin: .5rem .7rem;
-    /* background: var(--color-bg); */
-    background: red;
+    background: var(--color-primary-light);
     border-radius: var(--border-m);
     display: flex;
     flex-direction: column;

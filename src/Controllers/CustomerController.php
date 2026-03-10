@@ -15,7 +15,13 @@ class CustomerController
     $stmt->execute([':id' => $id]);
     return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
   }
-  public function getCustomerByEmail(string $email) {}
+  public function getByEmail(string $email)
+  {
+    $query = "SELECT * FROM customers WHERE email = :email";
+    $stmt = $this->pdo->prepare($query);
+    $stmt->execute([':email' => $email]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
   public function createCustomer(...$props) {}
   public function updateCustomerById(int $id, ...$props) {}
   public function deleteCustomerById(int $id) {}

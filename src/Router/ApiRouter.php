@@ -46,15 +46,16 @@ class ApiRouter extends Router
     $this->post('/login', [], function () {
       $data = $this->getJsonInput();
       if (!$data) return;
-
       $userEmail = $data['email'] ?? '';
       $password = $data['password'] ?? '';
-      if ($userEmail === "" || $password === "") {
+
+      if (!$userEmail || !$password) {
         HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Usuario y contraseña son requeridos');
         return;
       }
+
       $session = new SessionController($this->conn);
-      $session->login($userEmail, $password);
+      $session->loginCustomer($userEmail, $password);
     });
   }
 
@@ -62,6 +63,7 @@ class ApiRouter extends Router
   {
     $raw = file_get_contents('php://input');
     $data = json_decode($raw, true);
+
     if (!$data) {
       HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Datos JSON inválidos');
       return null;

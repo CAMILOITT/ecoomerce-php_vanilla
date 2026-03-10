@@ -8,6 +8,13 @@
   <title>Iniciar session</title>
 </head>
 
+<body>
+  <?php include_once __DIR__ . '/components/background.php' ?>
+  <?php include_once $path_content ?>
+</body>
+
+</html>
+
 <style>
   main {
     display: flex;
@@ -16,10 +23,3 @@
     height: 100vh;
   }
 </style>
-
-<body>
-  <?php include_once __DIR__ . '/components/background.php' ?>
-  <?php include_once $path_content ?>
-</body>
-
-</html>

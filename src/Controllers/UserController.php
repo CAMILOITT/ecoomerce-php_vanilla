@@ -30,8 +30,7 @@ class UserController
   public function getUserByEmail($email)
   {
     $stmt = $this->connection->prepare("SELECT * FROM users WHERE email = :email");
-    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-    $stmt->execute();
+    $stmt->execute([':email' => $email]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 }

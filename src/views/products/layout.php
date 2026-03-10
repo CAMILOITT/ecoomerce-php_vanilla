@@ -9,14 +9,23 @@
 </head>
 
 <style>
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: space-between;
+  }
+
   main {
     display: flex;
+    flex: auto;
     gap: 1rem;
-
+    min-height: 100%;
   }
 </style>
 
-<body style="height: 100vh;">
+<body>
   <?php include_once __DIR__ . '/../components/Header.php' ?>
   <main>
     <?php include_once __DIR__ . '/components/Filtro.php' ?>

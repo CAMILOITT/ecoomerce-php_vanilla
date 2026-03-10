@@ -59,12 +59,21 @@
   background: #CBA58C;
 }
 
+input {
+  appearance: none;
+}
+
 button,
 input {
   font-size: 1rem;
   border-radius: var(--pill);
-  padding: 12px 24px;
   transition: all 0.3s ease;
+  padding: .25rem .5rem;
+}
+
+button,
+input[type="search"] {
+  padding: 12px 24px;
 }
 
 button,
