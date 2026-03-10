@@ -53,6 +53,32 @@ class CustomerController
     $stmt->execute([':id' => $id]);
     return $stmt->fetch() ?: null;
   }
+  public function getSaleDetailsById(int $saleId)
+  {
+    $stmt = $this->pdo->prepare(
+      "SELECT
+        p.name,
+        sp.quantity,
+        sp.price AS unit_price
+      FROM facturas.sales_products sp
+      JOIN facturas.products p ON sp.product_id = p.id
+      WHERE sp.sale_id = :saleId"
+    );
+    $stmt->execute([':saleId' => $saleId]);
+    $details = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt = $this->pdo->prepare(
+      "SELECT total FROM facturas.sales WHERE id = :saleId"
+    );
+    $stmt->execute([':saleId' => $saleId]);
+    $sale = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+    return [
+      'details' => $details,
+      'total' => $sale ? $sale['total'] : 0
+    ];
+  }
 }
 
 

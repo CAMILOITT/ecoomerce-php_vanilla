@@ -57,6 +57,13 @@ class ApiRouter extends Router
       $session = new SessionController($this->conn);
       $session->loginCustomer($userEmail, $password);
     });
+
+    $this->get('/sale/{id}', ['id' => 'int'], function ($params) {
+      $customerController = new \App\Controllers\CustomerController($this->conn);
+      $saleDetails = $customerController->getSaleDetailsById($params['id']);
+      header('Content-Type: application/json');
+      echo json_encode($saleDetails);
+    });
   }
 
   private function getJsonInput(): ?array
