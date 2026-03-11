@@ -21,7 +21,7 @@
   <h3>Filtro</h3>
   <h4>Precio</h4>
   <div class="filter-price">
-    <input type="number" name="min_price" id="min-price" placeholder="min" style="width: 4rem;">
-    <input type="number" name="max_price" id="max-price" placeholder="max" style="width: 4rem;">
+    <input type="number" name="min_price" id="min-price" placeholder="min" min='0' style="width: 4rem;">
+    <input type="number" name="max_price" id="max-price" placeholder="max" min='0' style="width: 4rem;">
   </div>
 </div>
