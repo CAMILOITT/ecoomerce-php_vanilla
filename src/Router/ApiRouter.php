@@ -22,7 +22,7 @@ class ApiRouter extends Router
       $productController = new ProductController($this->conn);
       $page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
       $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
-      $products = $productController->getAllProducts($page, $limit);
+      $products = $productController->getAll($page, $limit);
       echo json_encode($products);
     });
 
