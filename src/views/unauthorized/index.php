@@ -110,26 +110,18 @@
 
 <script>
   function handleRedirect() {
-    // Verificar si hay un referrer y si pertenece al mismo dominio
     const referrer = document.referrer;
+    if (referrer && isSameDomain(referrer)) window.history.back();
+    else window.location.href = '/';
 
-    if (referrer && isSameDomain(referrer)) {
-      // Ir a la página anterior
-      window.history.back();
-    } else {
-      // Ir a la página de inicio
-      window.location.href = '/';
-    }
   }
 
   function isSameDomain(url) {
     try {
       const referrerUrl = new URL(url);
       const currentUrl = new URL(window.location.href);
-
       return referrerUrl.origin === currentUrl.origin;
     } catch (error) {
-      // Si hay un error al parsear la URL, ir a inicio
       return false;
     }
   }

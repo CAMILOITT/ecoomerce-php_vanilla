@@ -19,7 +19,6 @@
 
 <body>
   <?php include __DIR__ . '/components/Header.php' ?>
-  <?= $path_content  ?>
   <?php include $path_content ?>
   <?php include __DIR__ . '/components/Footer.php' ?>
 </body>

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Controllers\ProductController;
 
 $productsController = new ProductController($conn);
-$products = $productsController->getRandomProducts(10);
+$products = $productsController->getRandom(10);
 ?>
 
 <style>

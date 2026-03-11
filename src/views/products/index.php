@@ -4,91 +4,9 @@
     padding-block: 1rem;
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-  }
-</style>
-
-<div class="list-products" id="list-products">
-  <?php
-
-  use App\Controllers\ProductController;
-
-  $productsController = new ProductController($conn);
-  $products = [];
-
-  if (isset($_GET['category']))
-    $products = $productsController->getByCategory($_GET['category']);
-  elseif (isset($_GET['search']))
-    $products = $productsController->getBySearch($_GET['search']);
-  else
-    $products = $productsController->getAll(0, 30);
-
-  foreach ($products as $item): ?>
-    <?php include __DIR__ . '/../components/Card.php' ?>
-  <?php endforeach; ?>
-</div>
-
-<script>
-  const minPriceInput = document.querySelector('#min-price');
-  const maxPriceInput = document.querySelector('#max-price');
-  const listProducts = document.querySelector('#list-products');
-
-  function updateUrl() {
-    const url = new URL(window.location.href);
-    const minPrice = minPriceInput.value
-    let maxPrice = maxPriceInput.value
-
-    if (maxPriceInput.value < minPrice) {
-      maxPrice = minPrice + 1
-      maxPrice.value = maxPrice
-    }
-
-
-    if (minPrice) url.searchParams.set('min_price', minPrice);
-    else url.searchParams.delete('min_price');
-
-    if (maxPrice) url.searchParams.set('max_price', maxPrice);
-    else url.searchParams.delete('max_price');
-
-    window.history.replaceState(null, '', url.toString());
+    gap: clamp(.5rem, 1vw, 1rem) clamp(.2rem, 1vw, 1rem);
   }
 
-  const searchParams = new URLSearchParams(window.location.search);
-  minPriceInput.value = searchParams.get('min_price') || '';
-  maxPriceInput.value = searchParams.get('max_price') || '';
-
-  async function onFocusInputOut(event) {
-    updateUrl();
-    const baseUrl = new URL(window.location.href);
-    try {
-      const json = await fetch(`/api/v1/products?${baseUrl.searchParams.toString()}`).then(res => res.json())
-      console.log(json);
-
-      listProducts.innerHTML = '';
-      json.forEach(item => {
-        const card = document.createElement('div');
-        card.classList.add('card');
-        card.innerHTML = `
-            <a href="/products/${item.id}>" class="card-link">
-              <div class="img-container">
-                <img src="${item.image_url || '/placeholder.jpg'}" alt="${item.name}" class="card-img">
-              </div>
-              <div class="card-info">
-                <p class="item-name">${item.name}</p>
-                <span class="item-description">${item.description}</span>
-              </div>
-            </a>
-            <div class="card-footer">
-              <span class="item-price">$${item.unit_price}</span>
-              <button class="item-action-btn" aria-label="Add to cart">
-                <?php include 'assets/svg/icons/more.svg' ?>
-              </button>
-            </div>
-          `;
-        listProducts.appendChild(card);
-      });
-      listProducts.innerHTML += `
-      <style>
   .card {
     background: var(--color-card-bg);
     border-radius: var(--border-xl);
@@ -121,7 +39,6 @@
     border-radius: var(--border-l);
     width: 100%;
     aspect-ratio: 1/1;
-    /* height: 160px; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -229,7 +146,6 @@
   }
 
   @media (width <=768px) {
-
     .item-price {
       font-size: 1rem;
     }
@@ -240,15 +156,94 @@
     }
   }
 </style>
-`
+
+<div class="list-products" id="list-products">
+  <?php
+
+  use App\Controllers\ProductController;
+
+  $productsController = new ProductController($conn);
+  $products = [];
+
+  if (isset($_GET['category']))
+    $products = $productsController->getByCategory($_GET['category']);
+  elseif (isset($_GET['search']))
+    $products = $productsController->getBySearch($_GET['search']);
+  else
+    $products = $productsController->getAll(0, 30);
+
+  foreach ($products as $item): ?>
+    <?php include __DIR__ . '/../components/Card.php' ?>
+  <?php endforeach; ?>
+</div>
+
+<script>
+  const minPriceInput = document.querySelector("#min-price")
+  const maxPriceInput = document.querySelector("#max-price")
+  const listProducts = document.querySelector("#list-products")
+
+  function updateUrl() {
+    const url = new URL(window.location.href)
+    const minPrice = minPriceInput.value
+    let maxPrice = maxPriceInput.value
+
+    if (maxPriceInput.value < minPrice) {
+      maxPrice = minPrice + 1
+      maxPrice.value = maxPrice
+    }
+
+    if (minPrice) url.searchParams.set("min_price", minPrice)
+    else url.searchParams.delete("min_price")
+
+    if (maxPrice) url.searchParams.set("max_price", maxPrice)
+    else url.searchParams.delete("max_price")
+
+    window.history.replaceState(null, "", url.toString())
+  }
+
+  const searchParams = new URLSearchParams(window.location.search)
+  minPriceInput.value = searchParams.get("min_price") || ""
+  maxPriceInput.value = searchParams.get("max_price") || ""
+
+  async function onFocusInputOut(event) {
+    updateUrl()
+    const baseUrl = new URL(window.location.href)
+    try {
+      const json = await fetch(
+        `/api/v1/products?${baseUrl.searchParams.toString()}`,
+      ).then(res => res.json())
+      console.log(json)
+
+      listProducts.innerHTML = ""
+      json.forEach(item => {
+        const card = document.createElement("div")
+        card.classList.add("card")
+        card.innerHTML = `
+        <a href="/products/${item.id}>" class="card-link">
+          <div class="img-container">
+            <img src="${item.image_url || "/placeholder.jpg"}" alt="${item.name}" class="card-img">
+          </div>
+          <div class="card-info">
+            <p class="item-name">${item.name}</p>
+            <span class="item-description">${item.description}</span>
+          </div>
+        </a>
+        <div class="card-footer">
+          <span class="item-price">$${item.unit_price}</span>
+          <button class="item-action-btn" aria-label="Add to cart">
+            <?php include 'assets/svg/icons/more.svg' ?>
+          </button>
+        </div>
+      `
+        listProducts.appendChild(card)
+      })
     } catch (e) {
-      console.error('Error fetching products:', e);
+      console.error("Error fetching products:", e)
     }
   }
 
-  // Añadir listeners
-  minPriceInput.addEventListener('change', updateUrl);
-  maxPriceInput.addEventListener('change', updateUrl);
-  minPriceInput.addEventListener('focusout', onFocusInputOut);
-  maxPriceInput.addEventListener('focusout', onFocusInputOut);
+  minPriceInput.addEventListener("change", updateUrl)
+  maxPriceInput.addEventListener("change", updateUrl)
+  minPriceInput.addEventListener("focusout", onFocusInputOut)
+  maxPriceInput.addEventListener("focusout", onFocusInputOut)
 </script>

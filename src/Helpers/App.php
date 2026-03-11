@@ -24,6 +24,17 @@ class App
 
   function handleFrontend()
   {
+    if (preg_match('/\.(css|js)$/', $this->uri)) {
+      // var_dump('prueba');
+      // $file = realpath($this->baseViews . "/{$this->uri}");
+      // if ($file) return;
+      // if (str_ends_with($file, '.js')) header('Content-Type: application/javascript');
+
+      // if (str_ends_with($file, '.css')) header('Content-Type: text/css');
+
+      // readfile($file);
+      // return;
+    }
     $path_dir = realpath($this->baseViews . "/{$this->uri}");
     $conn = $this->conn;
 
