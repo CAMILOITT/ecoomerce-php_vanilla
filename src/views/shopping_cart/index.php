@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 use App\Controllers\ShoppingCart;
 
-if (isset($_SESSION['customer_id']))
-  $products = (new ShoppingCart($conn))->getAllProductsByCustomerId($_SESSION['customer_id']);
+$products = [];
+if (isset($_SESSION['id']))
+  $products = (new ShoppingCart($conn))->getAllProductsByCustomerId($_SESSION['id']);
 
 ?>
 
@@ -26,19 +27,83 @@ if (isset($_SESSION['customer_id']))
 
 <h1>Carrito de Compras</h1>
 
-<?php if (isset($_SESSION['customer_id'])): ?>
+<?php if (isset($_SESSION['id'])): ?>
   <div class="shopping-cart">
     <?php if (count($products) > 0): ?>
       <?php foreach ($products as $product): ?>
         <?php include_once __DIR__ . '/components/itemShop.php'; ?>
       <?php endforeach; ?>
     <?php else: ?>
-      <p>Bienvenido a tu carrito de compras</p>
+      <p>Aun no has agregado productos al carrito.</p>
     <?php endif; ?>
   </div>
+
 
 <?php else: ?>
   <div class="shopping-cart">
     <p>Bienvenido a tu carrito de compras</p>
+    <p>Para agregar y ver productos debes iniciar sesión</p>
+    <a href="/session">Iniciar sesión</a>
   </div>
 <?php endif; ?>
+
+<script>
+  const containerItems = document.querySelector('.shopping-cart')
+
+  function removeItem(productId) {
+    fetch(`/api/v1/shopping_cart/${productId}`, {
+      method: 'DELETE'
+    }).then(() => location.reload());
+  }
+
+  function lessItem(productId, currentQuantity) {
+    fetch(`/api/v1/shopping_cart/${productId}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        quantity: currentQuantity - 1
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(() => location.reload())
+  }
+
+  function addItems(productId, currentQuantity) {
+    fetch(`/api/v1/shopping_cart/${productId}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        quantity: currentQuantity + 1
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(() => location.reload())
+  }
+
+  containerItems.addEventListener('click', (e) => {
+    const card = e.target.closest('.item-shop');
+    if (!card) return
+
+    const btn = e.target.closest('button')
+    if (!btn) return
+
+    const productId = card.dataset.id;
+    const currentQuantity = parseInt(card.dataset.quantity || "0");
+
+    if (btn.classList.contains('item-delete')) {
+      removeItem(productId)
+      return
+    }
+
+    if (btn.classList.contains('item-less')) {
+      if (currentQuantity <= 1) return;
+      lessItem(productId, currentQuantity)
+      return
+    }
+
+    if (btn.classList.contains('item-add')) {
+      addItems(productId, currentQuantity)
+      return
+    }
+  })
+</script>

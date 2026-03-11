@@ -8,6 +8,8 @@ use App\Helpers\Router;
 use App\Controllers\DashboardController;
 use App\Controllers\ProductController;
 use App\Controllers\SessionController;
+use App\Controllers\ShoppingCart;
+use App\Model\ProductModel;
 use App\Types\CodeStatusHttp;
 use App\Utils\HandleHttp;
 use PDO;
@@ -19,22 +21,19 @@ class ApiRouter extends Router
     parent::__construct('/api/v1');
 
     $this->get('/products', [], function () {
-      $productController = new ProductController($this->conn);
+      $product = new ProductModel($this->conn);
       $page = isset($_GET['page']) ? (int)$_GET['page'] : 0;
       $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
-      $products = $productController->getAll($page, $limit);
-      echo json_encode($products);
+      $products = $product->getAll($page, $limit);
+      HandleHttp::response(CodeStatusHttp::OK, $products);
     });
 
     $this->post('/register', [], function () {
       $data = $this->getJsonInput();
       if (!$data) return;
-
-      // Note: Original code called getBestProductsOfMonth here for some reason.
-      // We keep the behavior, but it looks like a bug in the old code.
       $dashboard = new DashboardController();
       $bestProducts = $dashboard->getBestProductsOfMonth($this->conn);
-      echo json_encode($bestProducts);
+      HandleHttp::response(CodeStatusHttp::OK, $bestProducts);
     });
 
     $this->post('/logout', [], function () {
@@ -63,6 +62,25 @@ class ApiRouter extends Router
       $saleDetails = $customerController->getSaleDetailsById($params['id']);
       header('Content-Type: application/json');
       echo json_encode($saleDetails);
+    });
+
+    $this->put('/shopping_cart/{id}', ['id' => 'int'], function ($params) {
+      $data = $this->getJsonInput();
+      if (!isset($_SESSION['customer_id'])) {
+        HandleHttp::error(CodeStatusHttp::UNAUTHORIZED, 'No autorizado');
+        return;
+      }
+      $shoppingCart = new ShoppingCart($this->conn);
+      $shoppingCart->update($params['id'], $data['quantity'], $_SESSION['customer_id']);
+    });
+
+    $this->delete('/shopping_cart/{id}', ['id' => 'int'], function ($params) {
+      if (!isset($_SESSION['customer_id'])) {
+        HandleHttp::error(CodeStatusHttp::UNAUTHORIZED, 'No autorizado');
+        return;
+      }
+      $shoppingCart = new ShoppingCart($this->conn);
+      $shoppingCart->delete($params['id'], $_SESSION['customer_id']);
     });
   }
 

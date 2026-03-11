@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Controllers\ProductController;
+use App\Model\ProductModel;
 
-$productsController = new ProductController($conn);
+$productsController = new ProductModel($conn);
 $products = $productsController->getRandom(10);
 ?>
 

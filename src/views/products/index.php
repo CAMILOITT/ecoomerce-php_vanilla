@@ -160,17 +160,17 @@
 <div class="list-products" id="list-products">
   <?php
 
-  use App\Controllers\ProductController;
+  use App\Model\ProductModel;
 
-  $productsController = new ProductController($conn);
+  $productModel = new ProductModel($conn);
   $products = [];
 
   if (isset($_GET['category']))
-    $products = $productsController->getByCategory($_GET['category']);
+    $products = $productModel->getByCategory($_GET['category']);
   elseif (isset($_GET['search']))
-    $products = $productsController->getBySearch($_GET['search']);
+    $products = $productModel->getBySearch($_GET['search']);
   else
-    $products = $productsController->getAll(0, 30);
+    $products = $productModel->getAll(0, 30);
 
   foreach ($products as $item): ?>
     <?php include __DIR__ . '/../components/Card.php' ?>

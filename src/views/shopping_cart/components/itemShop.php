@@ -30,16 +30,16 @@
   }
 </style>
 
-<div class="item-shop">
+<div class="item-shop" data-id="<?= $product['id'] ?>" data-quantity="<?= $product['amount'] ?>">
   <div class="item-info">
     <img src="path/to/product/image.jpg" alt="Producto 1" class="item-img">
     <div class="item-details">
       <h3><?= $product['name'] ?></h3>
       <p>Precio: $<?= $product['price'] ?></p>
       <div class="item-quantity">
-        <button class="item-quantity-btn">-</button>
+        <button class="item-quantity-btn item-less">-</button>
         <p>Cantidad: <?= $product['amount'] ?></p>
-        <button class="item-quantity-btn">+</button>
+        <button class="item-quantity-btn item-add">+</button>
       </div>
     </div>
   </div>

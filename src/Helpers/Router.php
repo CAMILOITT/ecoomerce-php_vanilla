@@ -42,7 +42,31 @@ class Router
       $this->routes['POST'][$this->normalize($completeUri)]['action'] = $action;
   }
 
-  public function dispatch(string $uriOverride = null): bool
+  public function put(string $uri, array|string $middleware, callable|string|null $action): void
+  {
+    $completeUri = rtrim($this->baseUrl, '/') . '/' . ltrim($uri, '/');
+    if (is_string($middleware))
+      $this->middleware[] = $middleware;
+    else
+      $this->middleware = array_merge($this->middleware, $middleware);
+    $this->routes['PUT'][$this->normalize($completeUri)]['middleware'] = $middleware;
+    if (isset($action))
+      $this->routes['PUT'][$this->normalize($completeUri)]['action'] = $action;
+  }
+
+  public function delete(string $uri, array|string $middleware, callable|string|null $action): void
+  {
+    $completeUri = rtrim($this->baseUrl, '/') . '/' . ltrim($uri, '/');
+    if (is_string($middleware))
+      $this->middleware[] = $middleware;
+    else
+      $this->middleware = array_merge($this->middleware, $middleware);
+    $this->routes['DELETE'][$this->normalize($completeUri)]['middleware'] = $middleware;
+    if (isset($action))
+      $this->routes['DELETE'][$this->normalize($completeUri)]['action'] = $action;
+  }
+
+  public function dispatch(string $uriOverride): bool
   {
     $method = $_SERVER['REQUEST_METHOD'];
     $uri = $this->normalize($uriOverride ?? parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
@@ -63,7 +87,6 @@ class Router
         }
       }
     }
-    // AION /  gac
     if (is_callable($action)) {
       call_user_func($action);
       return true;

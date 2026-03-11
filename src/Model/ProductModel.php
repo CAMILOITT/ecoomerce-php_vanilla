@@ -48,7 +48,7 @@ class ProductModel
     return $stmt->fetchAll(PDO::FETCH_ASSOC) ?? [];
   }
 
-  public function getSearch(string $search)
+  public function getBySearch(string $search)
   {
     $stmt = $this->conn->prepare("SELECT * FROM {$this->table} WHERE name LIKE :search OR description LIKE :search");
     $likeSearch = '%' . $search . '%';
