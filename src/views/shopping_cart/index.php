@@ -23,6 +23,22 @@ if (isset($_SESSION['id']))
     justify-content: center;
     align-items: center;
   }
+
+  .btn-login {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--border-l);
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      color: white;
+      background: var(--color-primary-dark);
+    }
+  }
 </style>
 
 <h1>Carrito de Compras</h1>
@@ -43,7 +59,7 @@ if (isset($_SESSION['id']))
   <div class="shopping-cart">
     <p>Bienvenido a tu carrito de compras</p>
     <p>Para agregar y ver productos debes iniciar sesión</p>
-    <a href="/session">Iniciar sesión</a>
+    <a href="/session" class="btn-login">Iniciar sesión</a>
   </div>
 <?php endif; ?>
 

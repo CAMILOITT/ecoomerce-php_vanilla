@@ -7,7 +7,7 @@
 
     &>input {
       width: 100%;
-      padding: 14px 24px;
+      padding: 14px 42px 14px 24px;
       background: #FFFFFF;
       border-radius: var(--pill);
       box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);

@@ -1,3 +1,18 @@
+<?php
+
+use App\Model\ProductModel;
+
+$productModel = new ProductModel($conn);
+$products = [];
+
+if (isset($_GET['category']))
+  $products = $productModel->getByCategory($_GET['category']);
+elseif (isset($_GET['search']))
+  $products = $productModel->getBySearch($_GET['search']);
+else
+  $products = $productModel->getAll(0, 30);
+?>
+
 <style>
   .list-products {
     height: 100%;
@@ -155,27 +170,70 @@
       height: 28px;
     }
   }
+
+  .information {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .not-found-content {
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .not-found-content svg {
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 1rem;
+    color: var(--color-text-muted);
+  }
+
+  .not-found-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .not-found-content p {
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-clear {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--border-l);
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      color: white;
+      background: var(--color-primary-dark);
+    }
+  }
 </style>
 
-<div class="list-products" id="list-products">
-  <?php
-
-  use App\Model\ProductModel;
-
-  $productModel = new ProductModel($conn);
-  $products = [];
-
-  if (isset($_GET['category']))
-    $products = $productModel->getByCategory($_GET['category']);
-  elseif (isset($_GET['search']))
-    $products = $productModel->getBySearch($_GET['search']);
-  else
-    $products = $productModel->getAll(0, 30);
-
-  foreach ($products as $item): ?>
-    <?php include __DIR__ . '/../components/Card.php' ?>
-  <?php endforeach; ?>
-</div>
+<?php if (count($products)): ?>
+  <div class="list-products" id="list-products">
+    <?php foreach ($products as $item): ?>
+      <?php include __DIR__ . '/../components/Card.php' ?>
+    <?php endforeach; ?>
+  </div>
+<?php else: ?>
+  <div class="information">
+    <div class="not-found-content">
+      <?php include 'assets/svg/icons/search.svg' ?>
+      <h3>No se encontraron productos.</h3>
+      <p>Intenta ajustar tu búsqueda o filtros.</p>
+      <a href="/products" class="btn-clear">Limpiar búsqueda</a>
+    </div>
+  </div>
+<?php endif; ?>
 
 <script>
   const minPriceInput = document.querySelector("#min-price")
@@ -219,22 +277,22 @@
         const card = document.createElement("div")
         card.classList.add("card")
         card.innerHTML = `
-        <a href="/products/${item.id}>" class="card-link">
-          <div class="img-container">
-            <img src="${item.image_url || "/placeholder.jpg"}" alt="${item.name}" class="card-img">
-          </div>
-          <div class="card-info">
-            <p class="item-name">${item.name}</p>
-            <span class="item-description">${item.description}</span>
-          </div>
-        </a>
-        <div class="card-footer">
-          <span class="item-price">$${item.unit_price}</span>
-          <button class="item-action-btn" aria-label="Add to cart">
-            <?php include 'assets/svg/icons/more.svg' ?>
-          </button>
+      <a href="/products/${item.id}>" class="card-link">
+        <div class="img-container">
+          <img src="${item.image_url || "/placeholder.jpg"}" alt="${item.name}" class="card-img">
         </div>
-      `
+        <div class="card-info">
+          <p class="item-name">${item.name}</p>
+          <span class="item-description">${item.description}</span>
+        </div>
+      </a>
+      <div class="card-footer">
+        <span class="item-price">$${item.unit_price}</span>
+        <button class="item-action-btn" aria-label="Add to cart">
+          <?php include 'assets/svg/icons/more.svg' ?>
+        </button>
+      </div>
+    `
         listProducts.appendChild(card)
       })
     } catch (e) {
