@@ -18,7 +18,7 @@
 </style>
 
 <body>
-  <?php include $path_content ?>
+  <?php include $pathContent ?>
 </body>
 
 </html>

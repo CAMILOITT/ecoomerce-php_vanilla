@@ -7,6 +7,7 @@ session_set_cookie_params([
   'secure' => false,
   'httponly' => true,
 ]);
+
 session_start();
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -19,9 +20,8 @@ use App\Helpers\App;
 $pdo = new Database();
 $conn = $pdo->getConn();
 
-if (!$conn) {
-  die('Error al conectar a la base de datos');
-}
+if (!$conn) die('Error al conectar a la base de datos');
+
 
 $app = new App($conn);
 $app->render();

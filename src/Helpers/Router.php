@@ -80,12 +80,10 @@ class Router
 
     foreach ($routeMiddleware as $mw) {
       $mwClass = "App\\Middleware\\" . ucfirst($mw) . "Middleware";
-      if (class_exists($mwClass)) {
-        $mwInstance = new $mwClass();
-        if (method_exists($mwInstance, 'handle')) {
-          $mwInstance->handle();
-        }
-      }
+      if (!class_exists($mwClass)) continue;
+      $mwInstance = new $mwClass();
+      if (!method_exists($mwInstance, 'handle')) continue;
+      $mwInstance->handle();
     }
     if (is_callable($action)) {
       call_user_func($action);

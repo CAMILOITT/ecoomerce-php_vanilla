@@ -8,7 +8,6 @@ class RolMiddleware
 {
   public function handle()
   {
-    session_start();
     if (!isset($_SESSION['id'])) {
       header('Location: /session/login');
       exit();
@@ -17,7 +16,6 @@ class RolMiddleware
 
   public function handleAdmin()
   {
-    session_start();
     if (!isset($_SESSION['id'])) {
       header('Location: /session/login');
       exit();
