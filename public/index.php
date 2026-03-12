@@ -22,6 +22,5 @@ $conn = $pdo->getConn();
 
 if (!$conn) die('Error al conectar a la base de datos');
 
-
 $app = new App($conn);
 $app->render();

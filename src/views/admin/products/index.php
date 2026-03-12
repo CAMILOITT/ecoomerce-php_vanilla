@@ -1,8 +1,8 @@
 <?php
 
-use App\Controllers\ProductController;
+use App\Model\ProductModel;
 
-$products = (new ProductController($conn))->getAllProducts(0, 10);
+$products = (new ProductModel($conn))->getAll(0, 10);
 $titleHeader = "Productos";
 $descriptionHeader = "Administra los productos de tu tienda. Agrega, edita o elimina productos para mantener tu catálogo actualizado.";
 ?>

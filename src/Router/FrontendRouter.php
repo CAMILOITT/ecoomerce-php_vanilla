@@ -38,11 +38,13 @@ class FrontendRouter
     include $pathView;
   }
 
-  public function getLayout(string $pathDir)
+  public function getLayout(string $pathUri)
   {
-    if (!$pathDir) return false;
-    $pathLayout = realpath($pathDir . "/layout.php");
-    if (!$pathLayout) return $this->getLayout(join('/', array_slice(explode('/', $this->uri), 0, -1)));
+    if (!$pathUri) return realpath($this->baseViews .  "/layout.php");
+    $pathUri = trim($pathUri, '/');
+
+    if ($pathUri) $pathLayout = realpath($this->baseViews . "/$pathUri" . "/layout.php");
+    if (!$pathLayout) return $this->getLayout(join('/', array_slice(explode('/', $pathUri), 0, -1)));
     return $pathLayout;
   }
 
@@ -66,7 +68,6 @@ class FrontendRouter
     return $pathDir;
   }
 
-
   public function dispatch()
   {
     $conn = $this->conn;
@@ -76,8 +77,8 @@ class FrontendRouter
       $this->pageNotFound();
       return;
     }
-    $path_view = $this->getLayout($pathDir);
+    $pathLayout = $this->getLayout($this->uri);
     $path_content = realpath($pathDir . "/index.php");
-    include $path_view;
+    include $pathLayout;
   }
 }

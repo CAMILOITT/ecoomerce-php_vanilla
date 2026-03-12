@@ -6,7 +6,6 @@ namespace App\Router;
 
 use App\Helpers\Router;
 use App\Controllers\DashboardController;
-use App\Controllers\ProductController;
 use App\Controllers\SessionController;
 use App\Controllers\ShoppingCart;
 use App\Model\ProductModel;
