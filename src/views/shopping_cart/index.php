@@ -44,7 +44,7 @@ if (isset($_SESSION['id']))
 <h1>Carrito de Compras</h1>
 
 <?php if (isset($_SESSION['id'])): ?>
-  <div class="shopping-cart">
+  <div class="shopping-cart" data-user-id="<?= $_SESSION['id'] ?>">
     <?php if (count($products) > 0): ?>
       <?php foreach ($products as $product): ?>
         <?php include_once __DIR__ . '/components/itemShop.php'; ?>
@@ -63,63 +63,45 @@ if (isset($_SESSION['id']))
   </div>
 <?php endif; ?>
 
-<script>
+<script type="module">
+  import {
+    addItems,
+    removeItems,
+    lessItems
+  } from '/assets/js/shoppingCart.js'
+
   const containerItems = document.querySelector('.shopping-cart')
 
-  function removeItem(productId) {
-    fetch(`/api/v1/shopping_cart/${productId}`, {
-      method: 'DELETE'
-    }).then(() => location.reload());
-  }
+  if (containerItems.dataset.userId) {
+    const userId = containerItems.dataset.userId;
 
-  function lessItem(productId, currentQuantity) {
-    fetch(`/api/v1/shopping_cart/${productId}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        quantity: currentQuantity - 1
-      }),
-      headers: {
-        'Content-Type': 'application/json'
+    containerItems.addEventListener('click', (e) => {
+      console.log('prueba');
+
+      const card = e.target.closest('.item-shop');
+      if (!card) return
+
+      const btn = e.target.closest('button')
+      if (!btn) return
+
+      const productId = card.dataset.id;
+      const currentQuantity = parseInt(card.dataset.quantity || "0");
+
+      if (btn.classList.contains('item-delete')) {
+        removeItems(productId)
+        return
       }
-    }).then(() => location.reload())
-  }
 
-  function addItems(productId, currentQuantity) {
-    fetch(`/api/v1/shopping_cart/${productId}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        quantity: currentQuantity + 1
-      }),
-      headers: {
-        'Content-Type': 'application/json'
+      if (btn.classList.contains('item-less')) {
+        if (currentQuantity <= 1) return;
+        lessItems(productId, currentQuantity)
+        return
       }
-    }).then(() => location.reload())
+
+      if (btn.classList.contains('item-add')) {
+        addItems(productId, currentQuantity)
+        return
+      }
+    })
   }
-
-  containerItems.addEventListener('click', (e) => {
-    const card = e.target.closest('.item-shop');
-    if (!card) return
-
-    const btn = e.target.closest('button')
-    if (!btn) return
-
-    const productId = card.dataset.id;
-    const currentQuantity = parseInt(card.dataset.quantity || "0");
-
-    if (btn.classList.contains('item-delete')) {
-      removeItem(productId)
-      return
-    }
-
-    if (btn.classList.contains('item-less')) {
-      if (currentQuantity <= 1) return;
-      lessItem(productId, currentQuantity)
-      return
-    }
-
-    if (btn.classList.contains('item-add')) {
-      addItems(productId, currentQuantity)
-      return
-    }
-  })
 </script>

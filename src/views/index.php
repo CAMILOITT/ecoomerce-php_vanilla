@@ -2,14 +2,6 @@
   .products-section {
     padding: 1rem 0;
   }
-
-
-  /* main {
-    border-radius: var(--border-xl);
-    background: linear-gradient(180deg, var(--color-primary), transparent);
-
-    margin: 1rem .5rem;
-  } */
 </style>
 
 <main>
