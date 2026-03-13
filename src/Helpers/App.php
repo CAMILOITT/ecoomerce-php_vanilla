@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace App\Helpers;
 
 use PDO;
-use App\Router\FrontendRouter;
-use App\Router\ApiRouter;
+use App\Helpers\FrontendRouter;
 
 class App
 {
@@ -23,9 +22,9 @@ class App
 
   function render()
   {
-    $apiRouter = new ApiRouter($this->conn);
+    $apiRouter = new Router($this->conn);
     $matchedApiRoute = $apiRouter->dispatch('/' . $this->uri);
-
+    return;
     if ($matchedApiRoute)
       return;
 

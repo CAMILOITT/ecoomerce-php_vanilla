@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace App\Model;
 
 use PDO;
@@ -14,20 +13,25 @@ class ProductModel
 
   public function __construct(private PDO $conn) {}
 
-  public function getAll(int $start, int $limit)
+  public function getAll(int $start = 0, int $limit = 10)
   {
-    $stmt = $this->conn->prepare("SELECT * FROM {$this->table} LIMIT :start, :limit");
-    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
-    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $query = <<<SQL
+      SELECT * FROM {$this->table} LIMIT :limit  OFFSET :start;
+      SQL;
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':start', $start, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
   public function getRandom(int $limit)
   {
+    $sql = <<<SQL
+      SELECT * FROM {$this->table} ORDER BY RAND() LIMIT :limit
+    SQL;
     $stmt = $this->conn->prepare("SELECT * FROM {$this->table} ORDER BY RAND() LIMIT :limit");
-    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-    $stmt->execute();
+    $stmt->execute([':limit' => $limit]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC) ?? [];
   }
 

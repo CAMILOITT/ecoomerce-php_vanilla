@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Router;
+namespace App\Helpers;
 
 use PDO;
 
