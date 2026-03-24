@@ -10,6 +10,7 @@ session_set_cookie_params([
 
 session_start();
 
+
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../src/Config/Database.php';
 require_once __DIR__ . '/../src/Helpers/App.php';

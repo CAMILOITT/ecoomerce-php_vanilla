@@ -24,7 +24,7 @@ class App
   {
     $apiRouter = new Router($this->conn);
     $matchedApiRoute = $apiRouter->dispatch('/' . $this->uri);
-    return;
+    // return;
     if ($matchedApiRoute)
       return;
 

@@ -5,7 +5,17 @@ info:
 
 http:
   method: GET
-  url: http://localhost:8000/api/v1/products
+  url: http://localhost:8000/api/v1/products?page=3&limit=10
+  params:
+    - name: page
+      value: "3"
+      type: query
+    - name: limit
+      value: "10"
+      type: query
+  body:
+    type: sparql
+    data: ""
   auth: inherit
 
 settings:

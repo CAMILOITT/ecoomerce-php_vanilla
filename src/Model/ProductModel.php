@@ -31,7 +31,8 @@ class ProductModel
       SELECT * FROM {$this->table} ORDER BY RAND() LIMIT :limit
     SQL;
     $stmt = $this->conn->prepare("SELECT * FROM {$this->table} ORDER BY RAND() LIMIT :limit");
-    $stmt->execute([':limit' => $limit]);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC) ?? [];
   }
 
