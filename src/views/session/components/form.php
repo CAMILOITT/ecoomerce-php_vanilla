@@ -68,6 +68,9 @@
     <input type="password" id="password" name="password" required>
     <button type="submit">Iniciar sesión</button>
   </form>
+  <div style="margin-top: 1rem; text-align: center;">
+    ¿No tienes cuenta? <a href="/session/register" style="color: #007BFF; text-decoration: none;">Regístrate</a>
+  </div>
 </div>
 
 <script>

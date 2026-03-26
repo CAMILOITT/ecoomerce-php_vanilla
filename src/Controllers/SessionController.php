@@ -14,7 +14,67 @@ class SessionController
 {
   public function __construct(private PDO $connection) {}
 
-  public function register() {}
+  public function register()
+  {
+    $data = $this->getJsonInput();
+    if (!$data) return;
+
+    $name = $data['name'] ?? '';
+    $lastname = $data['lastname'] ?? '';
+    $dni = $data['dni'] ?? '';
+    $email = $data['email'] ?? '';
+    $password = $data['password'] ?? '';
+
+    // Validations
+    if (!$name || !$lastname || !$dni || !$email || !$password) {
+      HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Todos los campos son obligatorios');
+      return;
+    }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'El correo electrónico no es válido');
+      return;
+    }
+
+    $customerController = new CustomerController($this->connection);
+    
+    // Check if email already exists
+    if ($customerController->getByEmail($email)) {
+      HandleHttp::error(CodeStatusHttp::CONFLICT, 'El correo electrónico ya está registrado');
+      return;
+    }
+
+    // Hash password
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+    $success = $customerController->createCustomer([
+      'name' => $name,
+      'lastname' => $lastname,
+      'dni' => $dni,
+      'email' => $email,
+      'password' => $hashedPassword,
+      'document_id' => 1 // Default to Cédula
+    ]);
+
+    if ($success) {
+       HandleHttp::response(CodeStatusHttp::OK, ['success' => true, 'message' => 'Registro exitoso']);
+    } else {
+       HandleHttp::error(CodeStatusHttp::INTERNAL_SERVER_ERROR, 'Error al crear la cuenta');
+    }
+  }
+
+  private function getJsonInput(): ?array
+  {
+    $raw = file_get_contents('php://input');
+    $data = json_decode($raw, true);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+      HandleHttp::error(CodeStatusHttp::BAD_REQUEST, 'Datos JSON inválidos');
+      return null;
+    }
+
+    return $data;
+  }
 
   public function logout()
   {

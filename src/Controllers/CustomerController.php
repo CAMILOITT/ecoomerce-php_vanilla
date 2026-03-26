@@ -22,7 +22,23 @@ class CustomerController
     $stmt->execute([':email' => $email]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
-  public function createCustomer(...$props) {}
+  public function createCustomer(array $props)
+  {
+    $query = "INSERT INTO customers (document_id, name, lastname, dni, address, phone, email, password, state, created_at, updated_at) 
+              VALUES (:document_id, :name, :lastname, :dni, :address, :phone, :email, :password, :state, NOW(), NOW())";
+    $stmt = $this->pdo->prepare($query);
+    return $stmt->execute([
+      ':document_id' => $props['document_id'] ?? 1, // Defaulting to 1 if not provided, assuming it's a valid ID
+      ':name' => $props['name'],
+      ':lastname' => $props['lastname'],
+      ':dni' => $props['dni'],
+      ':address' => $props['address'] ?? '',
+      ':phone' => $props['phone'] ?? '',
+      ':email' => $props['email'],
+      ':password' => $props['password'],
+      ':state' => 1 // Active by default
+    ]);
+  }
   public function updateCustomerById(int $id, ...$props) {}
   public function deleteCustomerById(int $id) {}
   public function getPurchaseHistoryByCustomerId(int $customerId)
